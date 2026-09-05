@@ -63,6 +63,8 @@ PALETTES = {
         "base": "#070b16", "leak": "#131c31", "ink": "#eef1f8", "dark": True, "mood": "deep navy; dashboards"},
     "graphite": {"cool": ["#22262b", "#262a31", "#1d2126", "#292d34"], "warm": ["#2c2926", "#312c28", "#27241f", "#332e2a"],
         "base": "#0f1113", "leak": "#1b1e22", "ink": "#ecebe7", "dark": True, "mood": "neutral dark; nearly monochrome"},
+    "lantern": {"cool": ["#2f5a3a", "#3d6b3f", "#27503a", "#345f44"], "warm": ["#703a3c", "#7a5a2a", "#6e4a2a", "#6e3f3f"],
+        "base": "#0b0d0b", "leak": "#171a16", "ink": "#f1efe6", "dark": True, "mood": "coral, gold and green on black; the halftone one"},
     "nightfall": {"cool": ["#2a1e3f", "#331f47", "#1f1b38", "#3a2452"], "warm": ["#4a2a2a", "#542f26", "#3d2620", "#4f2e33"],
         "base": "#0e0a12", "leak": "#201526", "ink": "#f4ece6", "dark": True, "mood": "plum and rust; warm dark"},
 }

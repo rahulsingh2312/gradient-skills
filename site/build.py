@@ -87,7 +87,7 @@ h2{{font-size:clamp(36px,4.5vw,56px);letter-spacing:-.02em;line-height:1;margin:
 .grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}}
 .tile{{display:flex;align-items:flex-end;aspect-ratio:16/10;border-radius:18px;padding:18px;text-decoration:none;font-size:14px;color:inherit;overflow:hidden;transition:transform .2s}} .tile:hover{{transform:translateY(-2px)}}
 {tiles_css}
-.sk-ink,.sk-midnight,.sk-graphite,.sk-nightfall{{color:#f2f0ea}}
+.sk-ink,.sk-midnight,.sk-graphite,.sk-nightfall,.sk-lantern{{color:#f2f0ea}}
 .steps{{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px}} .step h3{{font-size:28px;margin:0 0 8px;letter-spacing:-.02em}} .step p{{opacity:.62;line-height:1.55;margin:0 0 12px}}
 pre{{background:#121212;color:#f2f0ea;border-radius:12px;padding:18px 20px;font-size:13px;line-height:1.9;overflow-x:auto;margin:0;white-space:pre}} pre.soft{{white-space:pre-wrap}}
 footer{{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5}} footer a{{color:inherit}}
@@ -127,8 +127,8 @@ footer{{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5}} foot
 </section>
 
 <section class="plain" id="palettes">
-  <h2 class="serif">Twenty palettes, <em>plus yours.</em></h2>
-  <p class="lede">Every tile is the same recipe with a different colour set. Sixteen light, four dark, and any of them has a dark twin. Pass a brand hex and it derives one for you.</p>
+  <h2 class="serif">Twenty-one palettes, <em>plus yours.</em></h2>
+  <p class="lede">Every tile is the same recipe with a different colour set. Sixteen light, five dark, and any of them has a dark twin. Pass a brand hex and it derives one for you.</p>
   <div class="grid">{tiles}</div>
 </section>
 

@@ -33,6 +33,7 @@ With `--layout split` the cool four sit on the left, the warm four on the right.
 | `midnight` | navy · indigo · purple | deep blue; analytics, dev tools |
 | `graphite` | warm and cool greys | nearly monochrome; luxury, hardware |
 | `nightfall` | plum · violet · rust | warm dark; music, nightlife |
+| `lantern` | coral · gold · green on black | the halftone one; festivals, food, culture |
 
 Any light palette also has a dark twin: `--palette meadow --dark`.
 

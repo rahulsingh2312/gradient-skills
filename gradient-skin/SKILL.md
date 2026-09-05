@@ -1,6 +1,6 @@
 ---
 name: gradient-skin
-description: Generate soft pastel "mesh" gradient backgrounds and editorial hero sections — the light-on-paper look from good landing pages (Linear, Vercel, Arc, Raycast), not the blue-purple-pink one every AI defaults to. Blurred colour blobs, a white light-leak, a faint dot grid, optional grain and drift animation, serif display type with an italic second line. Use this whenever someone asks for a gradient background, a mesh/aurora/blurred/pastel/dreamy/holographic gradient, a "soft" or "glowy" hero, a landing page hero, an OG image, an X/Twitter or social card, a wallpaper, a dark-mode version of any of those, or wants a gradient derived from a brand colour. Also use it when they only want the CSS for such a background, a React component, or a quick PNG. Outputs HTML, CSS, SVG, PNG, or a React component. 20 built-in palettes plus brand-derived ones.
+description: Generate soft pastel "mesh" gradient backgrounds and editorial hero sections — the light-on-paper look from good landing pages (Linear, Vercel, Arc, Raycast), not the blue-purple-pink one every AI defaults to. Blurred colour blobs, a white light-leak, a faint dot grid, optional grain and drift animation, serif display type with an italic second line. Use this whenever someone asks for a gradient background, a mesh/aurora/blurred/pastel/dreamy/holographic gradient, a "soft" or "glowy" hero, a landing page hero, an OG image, an X/Twitter or social card, a wallpaper, a dark-mode version of any of those, or wants a gradient derived from a brand colour. Also use it when they only want the CSS for such a background, a React component, or a quick PNG. Outputs HTML, CSS, SVG, PNG, or a React component. 21 built-in palettes plus brand-derived ones.
 ---
 
 # gradient.skin — pastel mesh gradients that look like light on paper
@@ -15,7 +15,7 @@ script. Open the references only when needed:
 
 - `references/recipe.md` — the CSS anatomy explained, for hand-writing it into React / Tailwind / Svelte
   / plain CSS. Read when the user wants it *inside their own codebase* rather than as a file.
-- `references/palettes.md` — all 20 palettes with moods, and how the brand-colour derivation works.
+- `references/palettes.md` — all 21 palettes with moods, and how the brand-colour derivation works.
 
 ## Quick start
 
@@ -52,7 +52,7 @@ to stdout.
 
 | Flag | What it does | Good values |
 |---|---|---|
-| `--palette` | colour family | 16 light: `dawn` (reference) `sorbet` `glacier` `dusk` `meadow` `ember` `peach` `lilac` `ocean` `citrus` `rose` `sand` `mint` `aurora` `candy` `slate` · 4 dark: `ink` `midnight` `graphite` `nightfall` |
+| `--palette` | colour family | 16 light: `dawn` (reference) `sorbet` `glacier` `dusk` `meadow` `ember` `peach` `lilac` `ocean` `citrus` `rose` `sand` `mint` `aurora` `candy` `slate` · 5 dark: `ink` `midnight` `graphite` `nightfall` `lantern` |
 | `--from-brand #hex` | derive a palette from one colour | keeps the brand hue on the cool side, complement on the warm side |
 | `--dark` | dark twin of any palette or brand | blobs drop to ~18% lightness, grid flips to white |
 | `--colors` | your own 8 hexes, 4 cool then 4 warm | every one ≥ 80% lightness (light) or ≤ 35% (dark) |
@@ -122,7 +122,7 @@ top of a spec is a cheap way to explore.
 - "softer / dreamier" → `--intensity 0.7`, maybe `--grain 0.05`
 - "more colour / punchier" → `--intensity 1.25` or `--layout corners`
 - "match our brand" → `--from-brand "#hex"`; add `--dark` for the dark mode
-- "dark mode" → `--dark` (any palette) or `--palette ink|midnight|graphite|nightfall`
+- "dark mode" → `--dark` (any palette) or `--palette ink|midnight|graphite|nightfall|lantern`
 - "make it move / flowing / like water" → `--animate`
 - "left-aligned / more editorial" → `--align left --display-font "Fraunces"`
 - "put it behind my existing page" → `--blank --format css`, wrap content in `.skin` (recipe.md)

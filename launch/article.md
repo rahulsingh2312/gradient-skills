@@ -31,7 +31,7 @@ Nobody needed the code. Everyone already knew.
 
 That gradient is the sound of an AI saying "make it look modern." It's in the Tailwind docs, it's in ten thousand tutorials, it's the first thing every model reaches for when nobody tells it what beautiful means. `from-blue-500 via-purple-500 to-pink-500`. You've shipped it. I've shipped it.
 
-*[image: images/article-thumb.png]*
+*[image: images/article-two-tweets.png]*
 
 Meanwhile the landing pages people actually screenshot and send each other look nothing like that. Linear. Arc. Raycast. Half the good YC pages this year. Same trick every time: a sheet of near-white paper with soft pools of colour bleeding in from the edges, a dot grid you can barely see, one serif headline, second line in italic.
 
@@ -74,7 +74,7 @@ The script underneath is plain Python, no packages, and it outputs whatever you 
 - an SVG if there's no browser around
 - PNGs at any size, for OG images, X cards, wallpapers
 
-Twenty palettes are built in, sixteen light and four dark, and any of them has a dark twin. Give it a brand colour and it derives one that keeps the temperature split.
+Twenty-one palettes are built in, sixteen light and five dark, and any of them has a dark twin. Give it a brand colour and it derives one that keeps the temperature split.
 
 *[image: images/one-prompt.png]*
 

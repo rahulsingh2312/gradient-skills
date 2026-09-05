@@ -41,7 +41,7 @@ the image does the selling. Lowercase is fine on X; the serif in the image carri
 
 **2/** · image: `images/palettes.png`
 
-> twenty palettes built in, sixteen light and four dark, and every one has a dark twin.
+> twenty-one palettes built in, sixteen light and five dark, and every one has a dark twin.
 > or give it your brand hex and it derives one. `--from-brand` does the rest
 
 **3/** · image: `images/one-prompt.png`
