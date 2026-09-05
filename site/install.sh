@@ -14,6 +14,7 @@ elif command -v python3 >/dev/null 2>&1; then python3 -c "import zipfile,sys; zi
 else echo "need unzip or python3 to extract"; exit 1; fi
 mkdir -p "$DEST_ROOT"; rm -rf "$DEST"; cp -R "$TMP/x/gradient-skin" "$DEST"; chmod +x "$DEST/scripts/skin.py" 2>/dev/null || true
 echo "✓ installed to $DEST"
+__ANALYTICS__
 echo "  in Claude Code:  /gradient-skin make me a hero"
 echo "  standalone:      python3 $DEST/scripts/skin.py --out hero.html"
 if ! command -v node >/dev/null 2>&1; then echo "  (PNG export needs Node + Playwright: npm i -g playwright && npx playwright install chromium)"; fi

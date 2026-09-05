@@ -36,30 +36,19 @@ if POSTHOG_KEY:
         "reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures "
         "getActiveMatchingSurveys getSurveys'.split(' '),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},"
         "e.__SV=1)}(document,window.posthog||[]);"
-        f"posthog.init('{POSTHOG_KEY}',{{api_host:'{POSTHOG_HOST}',person_profiles:'identified_only',"
-        "defaults:'2025-05-24'});</script>")
+        f"posthog.init('{POSTHOG_KEY}',{{api_host:'{POSTHOG_HOST}',person_profiles:'never',"
+        "autocapture:false,capture_pageview:true,capture_pageleave:false,disable_session_recording:true,"
+        "disable_surveys:true,enable_heatmaps:false});</script>")
 
 # one call, whichever backends are on the page
 analytics_js = """
-  // analytics: one helper, whichever backend is loaded
+  // analytics: pageviews come from the snippet, these are the download signals
   function track(name, props){ try{ if(window.posthog&&posthog.capture) posthog.capture(name, props||{});
     if(window.va) va('event',{name:name, data:props||{}}); }catch(e){} }
   document.querySelectorAll('[data-copy]').forEach(function(b){
-    b.addEventListener('click', function(){ track('install_copy', {where:'hero'}); }); });
+    b.addEventListener('click', function(){ track('install_copy', {}); }); });
   document.querySelectorAll('a[href="/skill"]').forEach(function(a){
     a.addEventListener('click', function(){ track('skill_download', {}); }); });
-  document.querySelectorAll('a[href^="https://github.com/"]').forEach(function(a){
-    a.addEventListener('click', function(){ track('github_click', {}); }); });
-  document.querySelectorAll('.tile').forEach(function(t){
-    t.addEventListener('click', function(){ track('palette_click', {palette:(t.className.match(/sk-([a-z]+)/)||[])[1]}); }); });
-  var draggedOnce=false;
-  hero.addEventListener('pointerdown', function(){ if(!draggedOnce){ draggedOnce=true; track('slider_drag', {}); } });
-  var sawInstall=false, installEl=document.getElementById('install');
-  if(installEl && 'IntersectionObserver' in window){
-    new IntersectionObserver(function(es){ es.forEach(function(e){
-      if(e.isIntersecting && !sawInstall){ sawInstall=true; track('install_section_view', {}); } }); },
-      {threshold:.4}).observe(installEl);
-  }
 """
 
 def gradient(pal_name, seed, animate=False, cls=None, intensity=1.0):
@@ -225,6 +214,25 @@ footer{{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5}} foot
 </script>
 </body></html>'''
 open(os.path.join(HERE, "index.html"), "w").write(html)
+
+# The installer is served as site/install; it is generated from site/install.sh so the
+# same PostHog key can count real curl installs (browsers never see those).
+INSTALL_PING = r"""
+# anonymous install count: one event, no personal data, nothing stored locally.
+# turn it off with:  GRADIENT_SKIN_NO_ANALYTICS=1
+if [ -z "$GRADIENT_SKIN_NO_ANALYTICS" ]; then
+  ID=$(head -c 8 /dev/urandom 2>/dev/null | od -An -tx1 | tr -d ' \n'); [ -n "$ID" ] || ID=anon
+  curl -fsS -m 3 -o /dev/null -X POST "__HOST__/i/v0/e/" -H "Content-Type: application/json" \
+    -d '{"api_key":"__KEY__","event":"install_complete","distinct_id":"'"$ID"'","properties":{"scope":"'"$SCOPE"'","$process_person_profile":false}}' 2>/dev/null || true
+fi
+"""
+
+installer = open(os.path.join(HERE, "install.sh")).read()
+installer = installer.replace("__ANALYTICS__\n",
+                              INSTALL_PING.replace("__KEY__", POSTHOG_KEY).replace("__HOST__", POSTHOG_HOST)
+                              if POSTHOG_KEY else "")
+open(os.path.join(HERE, "install"), "w").write(installer)
+
 import shutil
 src = os.path.join(HERE, "..", "gradient-skin.skill")
 if os.path.exists(src): shutil.copy(src, os.path.join(HERE, "gradient-skin.skill"))

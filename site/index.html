@@ -703,25 +703,13 @@ footer{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5} footer
   // copy buttons (both layers)
   document.querySelectorAll('[data-copy]').forEach(function(b){ b.addEventListener('click',function(){ navigator.clipboard.writeText('curl -fsSL gradient.skin/install | sh'); document.querySelectorAll('[data-copy] small').forEach(function(s){s.textContent='copied';}); }); });
 
-  // analytics: one helper, whichever backend is loaded
+  // analytics: pageviews come from the snippet, these are the download signals
   function track(name, props){ try{ if(window.posthog&&posthog.capture) posthog.capture(name, props||{});
     if(window.va) va('event',{name:name, data:props||{}}); }catch(e){} }
   document.querySelectorAll('[data-copy]').forEach(function(b){
-    b.addEventListener('click', function(){ track('install_copy', {where:'hero'}); }); });
+    b.addEventListener('click', function(){ track('install_copy', {}); }); });
   document.querySelectorAll('a[href="/skill"]').forEach(function(a){
     a.addEventListener('click', function(){ track('skill_download', {}); }); });
-  document.querySelectorAll('a[href^="https://github.com/"]').forEach(function(a){
-    a.addEventListener('click', function(){ track('github_click', {}); }); });
-  document.querySelectorAll('.tile').forEach(function(t){
-    t.addEventListener('click', function(){ track('palette_click', {palette:(t.className.match(/sk-([a-z]+)/)||[])[1]}); }); });
-  var draggedOnce=false;
-  hero.addEventListener('pointerdown', function(){ if(!draggedOnce){ draggedOnce=true; track('slider_drag', {}); } });
-  var sawInstall=false, installEl=document.getElementById('install');
-  if(installEl && 'IntersectionObserver' in window){
-    new IntersectionObserver(function(es){ es.forEach(function(e){
-      if(e.isIntersecting && !sawInstall){ sawInstall=true; track('install_section_view', {}); } }); },
-      {threshold:.4}).observe(installEl);
-  }
 
 })();
 </script>

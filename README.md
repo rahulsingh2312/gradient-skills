@@ -19,6 +19,9 @@ curl -fsSL gradient.skin/install | sh                 # → ~/.claude/skills/gra
 curl -fsSL gradient.skin/install | sh -s -- --project  # → ./.claude/skills/gradient-skin
 ```
 
+The installer sends one anonymous event so installs can be counted — no personal data, nothing stored
+on your machine. Skip it with `GRADIENT_SKIN_NO_ANALYTICS=1`.
+
 Or `gradient.skin/skill` downloads the packaged `.skill` file (drop it into Claude, the card shows a
 **Save skill** button). From source: clone this repo and copy `gradient-skin/` into `~/.claude/skills/`.
 
