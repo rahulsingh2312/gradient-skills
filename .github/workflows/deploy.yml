@@ -1,6 +1,6 @@
 # Deploys site/ to Vercel on every push.
 # Needs ONE repository secret: VERCEL_TOKEN  (Settings → Secrets and variables → Actions → New repository secret)
-# Pushes to the default branch go to production; every other branch gets a preview URL.
+# Pushes to main (or the default branch) go to production; every other branch gets a preview URL.
 name: Deploy to Vercel
 
 on:
@@ -38,7 +38,7 @@ jobs:
       - name: Deploy
         id: deploy
         run: |
-          if [ "${{ github.ref_name }}" = "${{ github.event.repository.default_branch }}" ]; then
+          if [ "${{ github.ref_name }}" = "main" ] || [ "${{ github.ref_name }}" = "${{ github.event.repository.default_branch }}" ]; then
             URL=$(npx --yes vercel@latest deploy --prod --yes --token "$VERCEL_TOKEN")
           else
             URL=$(npx --yes vercel@latest deploy --yes --token "$VERCEL_TOKEN")

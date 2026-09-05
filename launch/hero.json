@@ -1,10 +1,17 @@
 {
   "wordmark": "gradient.skin",
-  "palette": "dawn", "layout": "split", "seed": 3,
-  "footer": "A Claude Code skill · github.com/rahulsingh2312/gradient-skills",
+  "palette": "dawn",
+  "layout": "split",
+  "seed": 3,
+  "footer": "A Claude Code skill \u00b7 github.com/rahulsingh2312/gradient-skills",
   "panels": [
-    {"eyebrow": "Claude Code skill", "headline": "Gradients that", "italic": "feel like light.",
-     "sub": "Soft mesh backgrounds, a dot grid, editorial type. One prompt. Any palette. HTML, CSS, SVG or PNG.",
-     "badge": "Open source", "cta": "/gradient-skin"}
+    {
+      "eyebrow": "Claude Code skill",
+      "headline": "Not that",
+      "italic": "gradient.",
+      "sub": "The blue-to-pink one every AI reaches for. One prompt swaps it for soft light on paper. HTML, CSS, SVG or PNG.",
+      "badge": "Open source",
+      "cta": "/gradient-skin"
+    }
   ]
 }

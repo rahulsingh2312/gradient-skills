@@ -28,9 +28,9 @@ tiles = "".join(f'<a class="tile sk-{p}" href="#install"><span class="mono">--pa
 
 html = f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>gradient.skin — gradients that feel like light</title>
+<title>gradient.skin — not that gradient</title>
 <meta name="description" content="A Claude Code skill that generates soft pastel mesh gradient heroes: HTML, CSS, SVG or PNG from one prompt.">
-<meta property="og:title" content="gradient.skin — gradients that feel like light"><meta property="og:description" content="A Claude Code skill. One prompt → hero page, CSS, SVG or PNG."><meta property="og:image" content="og.png"><meta name="twitter:card" content="summary_large_image">
+<meta property="og:title" content="gradient.skin — not that gradient"><meta property="og:description" content="The blue-to-pink gradient every AI reaches for, replaced in one prompt. A Claude Code skill."><meta property="og:image" content="og.png"><meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -53,7 +53,7 @@ h1{{font-size:clamp(56px,7.6vw,128px);line-height:.92;letter-spacing:-.025em;mar
 .ugly h1{{font-weight:700;letter-spacing:-.045em;text-shadow:0 2px 18px rgba(0,0,0,.25)}} .ugly h1 em{{font-style:normal}}
 .sub{{font-size:19px;line-height:1.5;opacity:.62;max-width:36ch;margin:0 0 30px;min-height:calc(3 * 1.5em)}}
 .ugly .sub{{opacity:.92}}
-.cmd{{display:inline-flex;align-items:center;gap:14px;max-width:100%;box-sizing:border-box;height:44px;font-size:14px;padding:0 18px;border-radius:999px;border:1px solid rgba(0,0,0,.14);background:rgba(255,255,255,.55);backdrop-filter:blur(6px);cursor:pointer;color:inherit;font-family:inherit}}
+.cmd{{display:inline-flex;align-items:center;gap:14px;max-width:100%;box-sizing:border-box;height:44px;font-size:14px;padding:0 18px;border-radius:10px;border:1px solid rgba(0,0,0,.14);background:rgba(255,255,255,.55);backdrop-filter:blur(6px);cursor:pointer;color:inherit;font-family:inherit}}
 .cmd span{{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
 .cmd small{{flex-shrink:0;white-space:nowrap;opacity:.5;font-size:11px;letter-spacing:.2em;text-transform:uppercase}}
 .cmd:hover{{background:rgba(255,255,255,.8)}}
@@ -61,7 +61,7 @@ h1{{font-size:clamp(56px,7.6vw,128px);line-height:.92;letter-spacing:-.025em;mar
 .links{{margin-top:28px;font-size:15px;font-weight:500;height:28px}} .links a{{color:inherit;text-decoration:none;margin:6px 12px;display:inline-block;white-space:nowrap}} .links a:hover{{text-decoration:underline}}
 .foot{{position:absolute;bottom:22px;left:0;right:0;text-align:center;font-size:10px;letter-spacing:.32em;text-transform:uppercase;opacity:.42}}
 .ugly .foot{{opacity:.8}}
-.tag{{position:absolute;z-index:4;top:22px;font-size:10px;letter-spacing:.32em;text-transform:uppercase;padding:7px 12px;border-radius:999px;pointer-events:none;transition:opacity .3s}}
+.tag{{position:absolute;z-index:4;top:22px;font-size:10px;letter-spacing:.32em;text-transform:uppercase;padding:7px 12px;border-radius:7px;pointer-events:none;transition:opacity .3s}}
 .tag b{{font-weight:inherit}} .tag.l{{left:22px;background:rgba(0,0,0,.28);color:#fff}} .tag.r{{right:22px;background:rgba(255,255,255,.6);color:#121212;backdrop-filter:blur(6px)}}
 .hero[data-cut="0"] .tag.l{{opacity:0}} .hero[data-cut="100"] .tag.r{{opacity:0}}
 .grip{{position:absolute;z-index:5;top:0;bottom:0;left:clamp(44px,var(--cut,92%),calc(100% - 44px));width:64px;transform:translateX(-50%);cursor:ew-resize;touch-action:pan-y;outline:none}}
@@ -69,7 +69,7 @@ h1{{font-size:clamp(56px,7.6vw,128px);line-height:.92;letter-spacing:-.025em;mar
 .grip i{{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:52px;height:52px;border-radius:50%;background:#121212;color:#fff;display:flex;align-items:center;justify-content:center;font:500 18px "JetBrains Mono",monospace;letter-spacing:-.05em;box-shadow:0 10px 30px rgba(0,0,0,.3);font-style:normal;transition:transform .2s}}
 .grip:hover i,.grip:focus-visible i{{transform:translate(-50%,-50%) scale(1.08)}}
 .grip:focus-visible i{{box-shadow:0 0 0 3px #fff,0 10px 30px rgba(0,0,0,.3)}}
-.grip b{{position:absolute;left:50%;top:calc(50% + 40px);transform:translateX(-50%);font:500 10px "JetBrains Mono",monospace;letter-spacing:.3em;text-transform:uppercase;color:#121212;background:rgba(255,255,255,.7);padding:5px 9px;border-radius:999px;white-space:nowrap;opacity:0;transition:opacity .3s}}
+.grip b{{position:absolute;left:50%;top:calc(50% + 40px);transform:translateX(-50%);font:500 10px "JetBrains Mono",monospace;letter-spacing:.3em;text-transform:uppercase;color:#121212;background:rgba(255,255,255,.7);padding:5px 9px;border-radius:6px;white-space:nowrap;opacity:0;transition:opacity .3s}}
 .hero.settled .grip b{{opacity:1}}
 @media (prefers-reduced-motion:reduce){{.grip i{{transition:none}}}}
 
@@ -80,10 +80,10 @@ h2{{font-size:clamp(36px,4.5vw,56px);letter-spacing:-.02em;line-height:1;margin:
 {tiles_css}
 .sk-ink{{color:#f2f0ea}}
 .steps{{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px}} .step h3{{font-size:28px;margin:0 0 8px;letter-spacing:-.02em}} .step p{{opacity:.62;line-height:1.55;margin:0 0 12px}}
-pre{{background:#121212;color:#f2f0ea;border-radius:12px;padding:18px 20px;font-size:13px;line-height:1.9;overflow-x:auto;margin:0;white-space:pre}}
+pre{{background:#121212;color:#f2f0ea;border-radius:12px;padding:18px 20px;font-size:13px;line-height:1.9;overflow-x:auto;margin:0;white-space:pre}} pre.soft{{white-space:pre-wrap}}
 footer{{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5}} footer a{{color:inherit}}
 @media (max-width:760px){{
-  h1{{font-size:clamp(48px,14vw,96px)}} .wrap{{padding:100px 6vw 80px}}
+  h1{{font-size:clamp(38px,11.5vw,96px)}} .wrap{{padding:100px 6vw 80px}} .sub{{font-size:17px;max-width:34ch}}
   .cmd{{font-size:12px;padding:0 14px;gap:10px}}
   section.plain{{padding:72px 6vw}}
   .grid{{grid-template-columns:1fr;gap:16px}} .tile{{aspect-ratio:16/10;border-radius:14px}}
@@ -96,18 +96,18 @@ footer{{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5}} foot
   <div class="layer ugly"><div class="wrap">
     <div class="wordmark">gradient.skin</div>
     <div class="eyebrow mono">Claude Code skill</div>
-    <h1>Gradients that<br><em>feel like light.</em></h1>
-    <p class="sub">Soft mesh backgrounds, a dot grid, editorial type. One prompt. Any palette. HTML, CSS, SVG or PNG.</p>
-    <button class="cmd mono" data-copy><span>git clone rahulsingh2312/gradient-skills</span><small>copy install</small></button>
+    <h1>Not that<br><em>gradient.</em></h1>
+    <p class="sub">The blue-to-pink one every AI reaches for. One prompt swaps it for soft light on paper. HTML, CSS, SVG or PNG.</p>
+    <button class="cmd mono" data-copy><span>curl -fsSL gradient.skin/install | sh</span><small>copy</small></button>
     <div class="links"><a href="{REPO}">GitHub →</a><a href="#palettes">Palettes →</a></div>
     <div class="foot mono">Open source · MIT · gradient.skin</div>
   </div></div>
   <div class="layer good"><section class="skin">{hero_blobs}<div class="wrap">
     <div class="wordmark serif">gradient.skin</div>
     <div class="eyebrow mono">Claude Code skill</div>
-    <h1 class="serif">Gradients that<br><em>feel like light.</em></h1>
-    <p class="sub">Soft mesh backgrounds, a dot grid, editorial type. One prompt. Any palette. HTML, CSS, SVG or PNG.</p>
-    <button class="cmd mono" data-copy><span>git clone rahulsingh2312/gradient-skills</span><small>copy install</small></button>
+    <h1 class="serif">Not that<br><em>gradient.</em></h1>
+    <p class="sub">The blue-to-pink one every AI reaches for. One prompt swaps it for soft light on paper. HTML, CSS, SVG or PNG.</p>
+    <button class="cmd mono" data-copy><span>curl -fsSL gradient.skin/install | sh</span><small>copy</small></button>
     <div class="links"><a href="{REPO}">GitHub →</a><a href="#palettes">Palettes →</a></div>
     <div class="foot mono">Open source · MIT · gradient.skin</div>
   </div></section></div>
@@ -123,11 +123,12 @@ footer{{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5}} foot
 
 <section class="plain" id="install">
   <h2 class="serif">Three steps.</h2>
-  <p class="lede">A folder with a SKILL.md and a Python script. No packages, no build.</p>
+  <p class="lede">A folder with a SKILL.md and a Python script. No packages, no build. Prefer files? <a href="/skill" style="color:inherit">Download the .skill</a> or grab it on <a href="{REPO}" style="color:inherit">GitHub</a>.</p>
   <div class="steps">
-    <div class="step"><h3 class="serif">1. Install</h3><p>Drop the skill in your Claude Code skills folder.</p><pre>git clone {REPO}
-cp -r gradient-skills/gradient-skin ~/.claude/skills/gradient-skin</pre></div>
-    <div class="step"><h3 class="serif">2. Ask</h3><p>Describe the hero. Mention a palette, a brand colour, or nothing.</p><pre>/gradient-skin launch hero for Acme, brand #5B4BFF, animated, export OG + X images</pre></div>
+    <div class="step"><h3 class="serif">1. Install</h3><p>One line. Puts the skill in your Claude Code skills folder.</p><pre>curl -fsSL gradient.skin/install | sh</pre></div>
+    <div class="step"><h3 class="serif">2. Ask</h3><p>Describe the hero. Mention a palette, a brand colour, or nothing.</p><pre class="soft">/gradient-skin launch hero for Acme,
+brand #5B4BFF, animated,
+export OG + X images</pre></div>
     <div class="step"><h3 class="serif">3. Ship</h3><p>Get a responsive page, a CSS block for your codebase, an SVG, or PNGs.</p><pre>hero.html
 skin.css
 og.png
@@ -155,9 +156,12 @@ hero-x.png</pre></div>
   grip.addEventListener('pointerup',function(){{ dragging=false; }}); grip.addEventListener('pointercancel',function(){{ dragging=false; }});
   grip.addEventListener('keydown',function(e){{ var d=e.key==='ArrowLeft'?-4:e.key==='ArrowRight'?4:0; if(d){{ touched=true; cancelAnimationFrame(raf); set(cut+d); e.preventDefault(); }} }});
   // copy buttons (both layers)
-  document.querySelectorAll('[data-copy]').forEach(function(b){{ b.addEventListener('click',function(){{ navigator.clipboard.writeText('git clone {REPO} && cp -r gradient-skills/gradient-skin ~/.claude/skills/gradient-skin'); document.querySelectorAll('[data-copy] small').forEach(function(s){{s.textContent='copied';}}); }}); }});
+  document.querySelectorAll('[data-copy]').forEach(function(b){{ b.addEventListener('click',function(){{ navigator.clipboard.writeText('curl -fsSL gradient.skin/install | sh'); document.querySelectorAll('[data-copy] small').forEach(function(s){{s.textContent='copied';}}); }}); }});
 }})();
 </script>
 </body></html>'''
 open(os.path.join(HERE, "index.html"), "w").write(html)
+import shutil
+src = os.path.join(HERE, "..", "gradient-skin.skill")
+if os.path.exists(src): shutil.copy(src, os.path.join(HERE, "gradient-skin.skill"))
 print("wrote site/index.html", len(html), "bytes")

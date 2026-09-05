@@ -85,7 +85,7 @@ h1.display { font-size: clamp(56px, 7.6vw, 128px); line-height: .92; letter-spac
 h1.display em { font-style: italic; }
 .eyebrow { font-size: 11px; letter-spacing: .38em; text-transform: uppercase; opacity: .5; }
 .pill { font-size: 10px; letter-spacing: .3em; text-transform: uppercase; padding: 8px 16px;
-        border-radius: 999px; border: 1px solid rgba(0,0,0,.15); background: rgba(255,255,255,.5); }
+        border-radius: 7px; border: 1px solid rgba(0,0,0,.15); background: rgba(255,255,255,.5); }
 ```
 Google Fonts link: `family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500`.
 Alternatives with the same feel: Fraunces (softer), Newsreader (more bookish), Playfair Display (more fashion).

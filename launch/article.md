@@ -7,11 +7,11 @@
 
 ## Title
 
-I turned the internet's favourite gradient into a Claude Code skill
+Not that gradient.
 
 ## Subtitle
 
-The soft pastel "light on paper" look from every good landing page this year, reverse-engineered, written down, and made into one prompt. Free, open source.
+Every AI reaches for the same blue-to-pink. I reverse-engineered the soft "light on paper" look the good landing pages use, wrote down why it works, and made it one prompt. Free, open source.
 
 ---
 
@@ -62,11 +62,10 @@ Seven palettes are built in. `dawn` is the reference look. `sorbet`, `glacier`, 
 
 ## What it looks like to use
 
-Install is two lines:
+Install is one line:
 
 ```
-git clone https://github.com/rahulsingh2312/gradient-skills
-cp -r gradient-skills/gradient-skin ~/.claude/skills/gradient-skin
+curl -fsSL gradient.skin/install | sh
 ```
 
 Then in Claude Code:

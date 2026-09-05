@@ -15,12 +15,12 @@ One prompt gives you HTML, CSS, SVG, or PNG.
 ### Install
 
 ```bash
-git clone https://github.com/rahulsingh2312/gradient-skills
-cp -r gradient-skills/gradient-skin ~/.claude/skills/gradient-skin        # personal
-# or: cp -r gradient-skills/gradient-skin .claude/skills/gradient-skin     # per project
+curl -fsSL gradient.skin/install | sh                 # → ~/.claude/skills/gradient-skin
+curl -fsSL gradient.skin/install | sh -s -- --project  # → ./.claude/skills/gradient-skin
 ```
 
-Or drop `gradient-skin.skill` from this repo into Claude (the file card shows a **Save skill** button).
+Or `gradient.skin/skill` downloads the packaged `.skill` file (drop it into Claude, the card shows a
+**Save skill** button). From source: clone this repo and copy `gradient-skin/` into `~/.claude/skills/`.
 
 Then in Claude Code:
 

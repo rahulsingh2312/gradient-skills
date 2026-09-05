@@ -272,7 +272,7 @@ TYPE_CSS = """
 .skin-h1 { font-size: clamp(56px, 7.6vw, 128px); line-height:.92; letter-spacing:-.025em; margin:0 0 22px; }
 .skin-h1 em { font-style:italic; letter-spacing:-.02em; }
 .skin-sub { font-size: 19px; line-height:1.5; opacity:.62; max-width: 34ch; margin:0 0 26px; }
-.skin-badge { display:inline-block; font-size:10px; letter-spacing:.3em; text-transform:uppercase; padding:8px 16px; border-radius:999px; border:1px solid color-mix(in srgb, currentColor 18%, transparent); background: color-mix(in srgb, var(--skin-base) 55%, transparent); margin-bottom:30px; }
+.skin-badge { display:inline-block; font-size:10px; letter-spacing:.3em; text-transform:uppercase; padding:8px 14px; border-radius:7px; border:1px solid color-mix(in srgb, currentColor 18%, transparent); background: color-mix(in srgb, var(--skin-base) 55%, transparent); margin-bottom:30px; }
 .skin-cta { font-size:17px; font-weight:500; text-decoration:none; color:inherit; }
 .skin-cta span { display:inline-block; margin-left:.45em; transition:transform .2s; }
 .skin-cta:hover span { transform:translateX(3px); }

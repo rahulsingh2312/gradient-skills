@@ -56,7 +56,7 @@ the image does the selling. Lowercase is fine on X; the serif in the image carri
 
 > install:
 > ```
-> git clone <repo> && cp -r gradient-skills/gradient-skin ~/.claude/skills/gradient-skin
+> curl -fsSL gradient.skin/install | sh
 > ```
 > then in Claude Code: `/gradient-skin make me a hero for <your product>`
 > png export needs playwright (`npm i -g playwright && npx playwright install chromium`), html/css/svg need nothing
