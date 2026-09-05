@@ -6,6 +6,7 @@ spec = importlib.util.spec_from_file_location("skin", os.path.join(HERE, "..", "
 skin = importlib.util.module_from_spec(spec); spec.loader.exec_module(skin)
 
 REPO = "https://github.com/rahulsingh2312/gradient-skills"
+SITE = "https://gradient-skin.vercel.app"   # switch to https://gradient.skin once the domain resolves
 PALS = ["dawn", "sorbet", "glacier", "dusk", "meadow", "ember", "ink"]
 
 def gradient(pal_name, seed, animate=False, cls=None, intensity=1.0):
@@ -30,7 +31,11 @@ html = f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>gradient.skin — not that gradient</title>
 <meta name="description" content="A Claude Code skill that generates soft pastel mesh gradient heroes: HTML, CSS, SVG or PNG from one prompt.">
-<meta property="og:title" content="gradient.skin — not that gradient"><meta property="og:description" content="The blue-to-pink gradient every AI reaches for, replaced in one prompt. A Claude Code skill."><meta property="og:image" content="og.png"><meta name="twitter:card" content="summary_large_image">
+<meta property="og:type" content="website"><meta property="og:url" content="{SITE}/"><meta property="og:site_name" content="gradient.skin">
+<meta property="og:title" content="Not that gradient."><meta property="og:description" content="The blue-to-pink gradient every AI reaches for, replaced in one prompt. A free Claude Code skill."><meta property="og:image" content="{SITE}/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Not that gradient. A soft pastel mesh gradient hero.">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Not that gradient."><meta name="twitter:description" content="The blue-to-pink gradient every AI reaches for, replaced in one prompt. A free Claude Code skill."><meta name="twitter:image" content="{SITE}/og.png">
+<meta name="theme-color" content="#f6f5f1"><link rel="canonical" href="{SITE}/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%23b6f0dc%27/%3E%3Cstop offset=%27.5%27 stop-color=%27%23fbfaf6%27/%3E%3Cstop offset=%271%27 stop-color=%27%23f2db95%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27url(%23g)%27/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>

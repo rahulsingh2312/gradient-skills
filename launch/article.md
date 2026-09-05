@@ -1,6 +1,6 @@
 # X Article — paste-ready
 
-**Cover:** `images/article-thumb-before-after.png` (the hero frozen halfway).
+**Cover:** `images/article-thumb.png` (the hero frozen halfway).
 **Post text that carries the article** (pick one, the article card sits under it):
 
 > A · 111,000 people laughed at a screenshot of a gradient last month. they all recognised it.
@@ -31,7 +31,7 @@ Nobody needed the code. Everyone already knew.
 
 That gradient is the sound of an AI saying "make it look modern." It's in the Tailwind docs, it's in ten thousand tutorials, it's the first thing every model reaches for when nobody tells it what beautiful means. `from-blue-500 via-purple-500 to-pink-500`. You've shipped it. I've shipped it.
 
-*[image: images/article-thumb-before-after.png]*
+*[image: images/article-thumb.png]*
 
 Meanwhile the landing pages people actually screenshot and send each other look nothing like that. Linear. Arc. Raycast. Half the good YC pages this year. Same trick every time: a sheet of near-white paper with soft pools of colour bleeding in from the edges, a dot grid you can barely see, one serif headline, second line in italic.
 
