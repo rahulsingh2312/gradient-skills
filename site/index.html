@@ -228,7 +228,16 @@ h2{font-size:clamp(36px,4.5vw,56px);letter-spacing:-.02em;line-height:1;margin:0
 .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:32px} .step h3{font-size:28px;margin:0 0 8px;letter-spacing:-.02em} .step p{opacity:.62;line-height:1.55;margin:0 0 10px}
 pre{background:#121212;color:#f2f0ea;border-radius:12px;padding:18px 20px;font-size:13px;line-height:1.6;overflow-x:auto;margin:0}
 footer{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5}
-@media (max-width:760px){h1{font-size:clamp(52px,15vw,96px)} .cmd{font-size:12px;padding:10px 14px}}
+@media (max-width:760px){
+  h1{font-size:clamp(48px,14vw,96px)}
+  .wrap{padding:100px 6vw 80px}
+  .cmd{flex-direction:column;gap:8px;font-size:12px;padding:14px 18px;border-radius:20px;width:100%;max-width:360px;box-sizing:border-box;text-align:center}
+  .cmd span{display:none} .cmd small{font-size:12px;letter-spacing:.25em}
+  section.plain{padding:72px 6vw}
+  .tile{aspect-ratio:16/9}
+  .steps{gap:36px}
+  pre{white-space:pre-wrap;word-break:break-all;font-size:12px;padding:14px 16px}
+}
 </style></head>
 <body>
 <section class="haze"><div class="wrap">
