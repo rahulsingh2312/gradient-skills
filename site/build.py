@@ -78,8 +78,8 @@ h1{{font-size:clamp(56px,7.6vw,128px);line-height:.92;letter-spacing:-.025em;mar
 .grip:focus-visible i{{box-shadow:0 0 0 2px #fff,0 6px 18px rgba(0,0,0,.28)}}
 /* parked at an edge: half the circle is off-screen, so it reads as a tab with one chevron */
 .hero[data-cut="0"] .grip::before,.hero[data-cut="100"] .grip::before{{opacity:0}}
-.hero[data-cut="0"] .grip i svg{{transform:translateX(9px)}} .hero[data-cut="0"] .grip i svg .l{{display:none}}
-.hero[data-cut="100"] .grip i svg{{transform:translateX(-9px)}} .hero[data-cut="100"] .grip i svg .r{{display:none}}
+.hero[data-cut="0"] .grip i svg{{transform:translateX(6px)}} .hero[data-cut="0"] .grip i svg .l{{display:none}}
+.hero[data-cut="100"] .grip i svg{{transform:translateX(-6px)}} .hero[data-cut="100"] .grip i svg .r{{display:none}}
 @media (prefers-reduced-motion:reduce){{.grip i{{transition:none}}}}
 
 section.plain{{max-width:1100px;margin:0 auto;padding:96px 6vw}}
