@@ -20,7 +20,7 @@ the image does the selling. Lowercase is fine on X; the serif in the image carri
 
 **B — the demo** · image: `images/one-prompt.png`
 
-> `/gradient-skin launch hero for acme, brand #5B4BFF, a bit punchier, export OG + X images`
+> `/gradient-skin launch hero, palette meadow, animated, export OG + X images`
 >
 > that's the whole workflow now. Claude Code skill, free, link below
 

@@ -71,7 +71,7 @@ curl -fsSL gradient.skin/install | sh
 Then in Claude Code:
 
 ```
-/gradient-skin launch hero for Acme, brand #5B4BFF, a bit punchier, export OG + X images
+/gradient-skin launch hero, palette meadow, animated, export OG + X images
 ```
 
 You get a hero page, the CSS, and two PNGs, all from the same words. If you want to skip Claude entirely, the script runs on its own:

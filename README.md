@@ -25,7 +25,7 @@ Or `gradient.skin/skill` downloads the packaged `.skill` file (drop it into Clau
 Then in Claude Code:
 
 ```
-/gradient-skin launch hero for Acme, brand #5B4BFF, a bit punchier, export OG + X images
+/gradient-skin launch hero, palette meadow, animated, export OG + X images
 ```
 
 ### Use the script directly
