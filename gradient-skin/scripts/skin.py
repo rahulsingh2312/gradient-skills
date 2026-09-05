@@ -22,41 +22,55 @@ import argparse, json, os, random, shutil, subprocess, sys, tempfile
 # between cool and warm, not in any single colour. That is what makes it feel like
 # light on paper instead of a 2012 "web 2.0" gradient.
 PALETTES = {
+    # ---- light: four cool, four warm, paper base, light-leak, ink ----
     "dawn": {  # the reference look: mint/lavender/pink on the left, cream/gold on the right
-        "cool": ["#b6f0dc", "#cfe1ff", "#d7cdf7", "#f3c4e6"],
-        "warm": ["#f9efc6", "#f2db95", "#f8d6c0", "#f8e2dc"],
-        "base": "#f6f5f1", "leak": "#ffffff", "ink": "#121212",
-    },
-    "sorbet": {  # peach / raspberry / lemon
-        "cool": ["#f8c9d9", "#f6b8c9", "#ffd9e8", "#fbe2f0"],
-        "warm": ["#ffe3b3", "#ffd08a", "#fff3c4", "#ffd7b0"],
-        "base": "#fff8f3", "leak": "#ffffff", "ink": "#1a1215",
-    },
-    "glacier": {  # mint / ice blue / lilac, very cold
-        "cool": ["#c8f4ec", "#c9e4ff", "#dad4ff", "#e6f6ff"],
-        "warm": ["#eef3ff", "#f4f0ff", "#e4f8f3", "#ffffff"],
-        "base": "#f3f6fa", "leak": "#ffffff", "ink": "#0e1420",
-    },
-    "dusk": {  # lavender / rose / apricot, evening light
-        "cool": ["#cfc4f7", "#e0c6f2", "#bfd0ff", "#f0c9ea"],
-        "warm": ["#ffd9c2", "#ffc9b8", "#ffe7d1", "#ffd6dd"],
-        "base": "#f7f3f5", "leak": "#fffaf5", "ink": "#16101c",
-    },
-    "meadow": {  # sage / lemon / sky, fresh
-        "cool": ["#cdeedb", "#bfe9d4", "#cfe6ff", "#e2f3e8"],
-        "warm": ["#f7f4b8", "#fff0a8", "#eef7c8", "#fffbe0"],
-        "base": "#f5f8f2", "leak": "#ffffff", "ink": "#0f1a12",
-    },
-    "ember": {  # warm all over: apricot / coral / honey (single-temperature)
-        "cool": ["#ffd6c9", "#ffc2b3", "#ffe1cf", "#ffd0d0"],
-        "warm": ["#ffe6b0", "#ffd48c", "#fff0cf", "#ffdcae"],
-        "base": "#fff6ef", "leak": "#fffaf2", "ink": "#1c120c",
-    },
-    "ink": {  # dark mode: charcoal with dim aurora
-        "cool": ["#1f3a4a", "#2a2f5c", "#1e4a3f", "#3b2a55"],
-        "warm": ["#4a3a1e", "#5a2e3a", "#3e3320", "#4b2b2b"],
-        "base": "#0d0e12", "leak": "#1c1d24", "ink": "#f2f0ea",
-    },
+        "cool": ["#b6f0dc", "#cfe1ff", "#d7cdf7", "#f3c4e6"], "warm": ["#f9efc6", "#f2db95", "#f8d6c0", "#f8e2dc"],
+        "base": "#f6f5f1", "leak": "#ffffff", "ink": "#121212", "mood": "sunrise on paper; the default"},
+    "sorbet": {"cool": ["#f8c9d9", "#f6b8c9", "#ffd9e8", "#fbe2f0"], "warm": ["#ffe3b3", "#ffd08a", "#fff3c4", "#ffd7b0"],
+        "base": "#fff8f3", "leak": "#ffffff", "ink": "#1a1215", "mood": "raspberry and lemon; playful"},
+    "glacier": {"cool": ["#c8f4ec", "#c9e4ff", "#dad4ff", "#e6f6ff"], "warm": ["#eef3ff", "#f4f0ff", "#e4f8f3", "#ffffff"],
+        "base": "#f3f6fa", "leak": "#ffffff", "ink": "#0e1420", "mood": "ice and lilac; quiet, technical"},
+    "dusk": {"cool": ["#cfc4f7", "#e0c6f2", "#bfd0ff", "#f0c9ea"], "warm": ["#ffd9c2", "#ffc9b8", "#ffe7d1", "#ffd6dd"],
+        "base": "#f7f3f5", "leak": "#fffaf5", "ink": "#16101c", "mood": "lavender into apricot; evening"},
+    "meadow": {"cool": ["#cdeedb", "#bfe9d4", "#cfe6ff", "#e2f3e8"], "warm": ["#f7f4b8", "#fff0a8", "#eef7c8", "#fffbe0"],
+        "base": "#f5f8f2", "leak": "#ffffff", "ink": "#0f1a12", "mood": "sage and lemon; fresh"},
+    "ember": {"cool": ["#ffd6c9", "#ffc2b3", "#ffe1cf", "#ffd0d0"], "warm": ["#ffe6b0", "#ffd48c", "#fff0cf", "#ffdcae"],
+        "base": "#fff6ef", "leak": "#fffaf2", "ink": "#1c120c", "mood": "apricot and honey; golden hour"},
+    "peach": {"cool": ["#fbd9d3", "#f9c9c0", "#fde3dc", "#f7d0cf"], "warm": ["#ffe2c4", "#ffd2a6", "#fff0d9", "#ffdcb8"],
+        "base": "#fff7f2", "leak": "#fffaf6", "ink": "#1e1411", "mood": "soft peach; warm, friendly"},
+    "lilac": {"cool": ["#e3d6ff", "#d3c4fb", "#eee6ff", "#dcd0ff"], "warm": ["#ffe4ee", "#ffd6e6", "#fff0f4", "#f9dcf0"],
+        "base": "#f8f5fc", "leak": "#ffffff", "ink": "#17122a", "mood": "lilac and blush; gentle"},
+    "ocean": {"cool": ["#c6e6ff", "#b8dcfb", "#d6f0ff", "#cbe2ff"], "warm": ["#d9f6f0", "#c8f0e8", "#eafaf6", "#e3f4ff"],
+        "base": "#f2f7fb", "leak": "#ffffff", "ink": "#0b1826", "mood": "sky and seafoam; calm, trustworthy"},
+    "citrus": {"cool": ["#d9f5e4", "#c9efd9", "#e8faee", "#d4f1ea"], "warm": ["#fff3b0", "#ffe98a", "#fff9d6", "#ffefb8"],
+        "base": "#fbfbef", "leak": "#ffffff", "ink": "#1a1b08", "mood": "lime and lemon; energetic"},
+    "rose": {"cool": ["#f5d3e3", "#f0c3d9", "#fbe3ee", "#f3cfe0"], "warm": ["#ffe1e1", "#ffd0d0", "#fff0ec", "#ffdada"],
+        "base": "#fdf4f6", "leak": "#fffafb", "ink": "#24101a", "mood": "rose all over; romantic"},
+    "sand": {"cool": ["#e9e5dc", "#dfd9cd", "#f1eee7", "#e4e0d7"], "warm": ["#f7e6c8", "#f1d8ad", "#fbf0dc", "#f4dfbf"],
+        "base": "#f8f5ef", "leak": "#fffdf8", "ink": "#1b1712", "mood": "linen and sand; editorial, near-neutral"},
+    "mint": {"cool": ["#c9f3e3", "#b6ecd6", "#dcf7ec", "#cdf0e6"], "warm": ["#eafbe1", "#dcf7cf", "#f3fcec", "#e5f9dd"],
+        "base": "#f3faf6", "leak": "#ffffff", "ink": "#0d1d15", "mood": "mint and lime; clean, health"},
+    "aurora": {"cool": ["#b8f0e6", "#c2d6ff", "#d9c9ff", "#f2c4ea"], "warm": ["#c9fff0", "#d6e4ff", "#ecdcff", "#ffd6ef"],
+        "base": "#f4f6fa", "leak": "#ffffff", "ink": "#0f1424", "mood": "teal to violet to pink; the northern-lights one"},
+    "candy": {"cool": ["#ffd1ec", "#ffc0e3", "#ffe1f3", "#f8cdf0"], "warm": ["#d9f0ff", "#c4e6ff", "#e9f7ff", "#d1ecff"],
+        "base": "#fdf5fb", "leak": "#ffffff", "ink": "#1d0f1d", "mood": "bubblegum and sky; loud but soft"},
+    "slate": {"cool": ["#dfe6f0", "#d3dce9", "#e8eef5", "#d9e2ee"], "warm": ["#ece9f2", "#e4e0ee", "#f2f0f6", "#e9e6f0"],
+        "base": "#f4f6f9", "leak": "#ffffff", "ink": "#111722", "mood": "cool greys; corporate, almost invisible"},
+    # ---- dark: same structure, blobs at 15-30% lightness, grid flips to white ----
+    "ink": {"cool": ["#1f3a4a", "#2a2f5c", "#1e4a3f", "#3b2a55"], "warm": ["#4a3a1e", "#5a2e3a", "#3e3320", "#4b2b2b"],
+        "base": "#0d0e12", "leak": "#1c1d24", "ink": "#f2f0ea", "dark": True, "mood": "charcoal with a dim aurora"},
+    "midnight": {"cool": ["#14284a", "#1a2f5e", "#102540", "#1d2c56"], "warm": ["#2b2547", "#3a2450", "#22203d", "#2e2a55"],
+        "base": "#070b16", "leak": "#131c31", "ink": "#eef1f8", "dark": True, "mood": "deep navy; dashboards"},
+    "graphite": {"cool": ["#22262b", "#262a31", "#1d2126", "#292d34"], "warm": ["#2c2926", "#312c28", "#27241f", "#332e2a"],
+        "base": "#0f1113", "leak": "#1b1e22", "ink": "#ecebe7", "dark": True, "mood": "neutral dark; nearly monochrome"},
+    "nightfall": {"cool": ["#2a1e3f", "#331f47", "#1f1b38", "#3a2452"], "warm": ["#4a2a2a", "#542f26", "#3d2620", "#4f2e33"],
+        "base": "#0e0a12", "leak": "#201526", "ink": "#f4ece6", "dark": True, "mood": "plum and rust; warm dark"},
+}
+
+SIZES = {  # named presets for --size
+    "og": "1200x630", "x": "1600x900", "twitter": "1600x900", "square": "1080x1080", "story": "1080x1920",
+    "linkedin": "1200x627", "wallpaper": "2560x1440", "4k": "3840x2160", "page": "2000x1300", "banner": "1920x768",
+    "hd": "1920x1080", "mobile": "390x844",
 }
 
 LAYOUTS = ("split", "corners", "wash", "halo")
@@ -100,6 +114,52 @@ def font_head(mode):
         faces.append(f"@font-face{{font-family:'{fam}';font-style:{style};font-weight:{weight};font-display:block;src:url('{src}') format('woff2');}}")
     return "<style>" + "".join(faces) + "</style>"
 
+
+# --------------------------------------------------------------------------- palette tools
+import colorsys
+
+def _hls(hex_color):
+    r, g, b = (int(hex_color.lstrip('#')[i:i + 2], 16) / 255 for i in (0, 2, 4))
+    return colorsys.rgb_to_hls(r, g, b)
+
+def _hex(h, l, s):
+    r, g, b = colorsys.hls_to_rgb(h % 1.0, max(0, min(1, l)), max(0, min(1, s)))
+    return '#%02x%02x%02x' % tuple(int(round(v * 255)) for v in (r, g, b))
+
+def palette_from_brand(hex_color, dark=False):
+    """Derive a full palette from one brand colour. Keeps the brand hue on the cool side (that is what
+    carries identity) and puts its complement, lifted to cream/gold territory, on the warm side. See
+    references/palettes.md for the reasoning behind the numbers."""
+    h, _, s0 = _hls(hex_color)
+    sat = max(.45, min(.85, s0 if s0 > 0 else .6))
+    if dark:
+        cool = [_hex(h, .20, sat * .7), _hex(h - 40 / 360, .18, sat * .6), _hex(h - 80 / 360, .17, sat * .55), _hex(h + 25 / 360, .21, sat * .6)]
+        warm = [_hex(h + 160 / 360, .19, sat * .5), _hex(h + 175 / 360, .17, sat * .5), _hex(h + 195 / 360, .18, sat * .45), _hex(h + 185 / 360, .20, sat * .4)]
+        return {"cool": cool, "warm": warm, "base": _hex(h, .05, .25), "leak": _hex(h, .11, .25), "ink": _hex(h, .94, .15), "dark": True}
+    cool = [_hex(h, .86, sat), _hex(h - 40 / 360, .87, sat * .9), _hex(h - 80 / 360, .88, sat * .8), _hex(h + 25 / 360, .87, sat * .85)]
+    warm = [_hex(h + 160 / 360, .90, .8), _hex(h + 175 / 360, .80, .75), _hex(h + 195 / 360, .87, .7), _hex(h + 185 / 360, .92, .6)]
+    return {"cool": cool, "warm": warm, "base": _hex(h, .965, .18), "leak": "#ffffff", "ink": _hex(h, .07, .2)}
+
+def darken_palette(pal):
+    """A dark twin of any light palette: same hues, blobs dropped to ~20% lightness, base near-black."""
+    if pal.get("dark"):
+        return dict(pal)
+    def d(c, l): h, _, s = _hls(c); return _hex(h, l, max(.22, s * .55))
+    h0, _, _ = _hls(pal["cool"][0])
+    return {"cool": [d(c, .19) for c in pal["cool"]], "warm": [d(c, .17) for c in pal["warm"]],
+            "base": _hex(h0, .05, .15), "leak": _hex(h0, .11, .15), "ink": "#f2f0ea", "dark": True}
+
+def resolve_size(s):
+    s = (s or "1600x900").lower()
+    return SIZES.get(s, s)
+
+def list_palettes():
+    rows = []
+    for name, p in PALETTES.items():
+        tag = "dark " if p.get("dark") else "light"
+        rows.append(f"{name:<10} {tag}  {' '.join(p['cool'])}  →  {' '.join(p['warm'])}   {p.get('mood','')}")
+    return "\n".join(rows)
+
 # --------------------------------------------------------------------------- helpers
 def hex_to_rgb(h):
     h = h.lstrip("#")
@@ -112,7 +172,7 @@ def rgba(h, a):
     return f"rgba({r},{g},{b},{a:.2f})"
 
 def parse_size(s):
-    w, h = s.lower().split("x")
+    w, h = resolve_size(s).split("x")
     return int(w), int(h)
 
 def parse_colors(s):
@@ -227,7 +287,7 @@ def build_css(pal, blobs, leak, opts):
         # static fallback stays as the background (renders before JS-free animation kicks in and for
         # reduced-motion users); the moving copy sits on top in .skin-blobs
         pass
-    dark = pal is PALETTES.get("ink") or opts.get("dark")
+    dark = bool(pal.get("dark")) or bool(opts.get("dark"))
     dot = "rgba(255,255,255,.10)" if dark else "rgba(15,15,15,.09)"
     grid = ""
     if opts.get("grid", True):
@@ -261,13 +321,14 @@ def build_css(pal, blobs, leak, opts):
 """
 
 TYPE_CSS = """
-.skin { font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; -webkit-font-smoothing:antialiased; }
-.skin .serif { font-family: "Instrument Serif", "Iowan Old Style", "Playfair Display", Georgia, "Times New Roman", serif; font-weight:400; }
+.skin { font-family: var(--skin-body, "Inter"), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; -webkit-font-smoothing:antialiased; }
+.skin .serif { font-family: var(--skin-display, "Instrument Serif"), "Iowan Old Style", "Playfair Display", Georgia, "Times New Roman", serif; font-weight:400; }
 .skin .mono  { font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 .skin-content { position:relative; z-index:1; min-height:100%; display:flex; flex-direction:column; }
 .skin-wordmark { position:absolute; top:34px; left:0; right:0; text-align:center; font-size:28px; letter-spacing:-.01em; }
 .skin-panels { flex:1; display:grid; grid-template-columns: repeat(var(--n,1), 1fr); align-items:center; padding: 120px 6vw 96px; gap: 4vw; }
 .skin-panel { text-align:center; display:flex; flex-direction:column; align-items:center; }
+.skin-left .skin-panel { text-align:left; align-items:flex-start; } .skin-left .skin-wordmark { text-align:left; left:6vw; } .skin-left .skin-footer { text-align:left; left:6vw; }
 .skin-eyebrow { font-size:11px; letter-spacing:.38em; text-transform:uppercase; opacity:.5; margin-bottom:22px; }
 .skin-h1 { font-size: clamp(56px, 7.6vw, 128px); line-height:.92; letter-spacing:-.025em; margin:0 0 22px; }
 .skin-h1 em { font-style:italic; letter-spacing:-.02em; }
@@ -307,6 +368,13 @@ def panel_html(p):
 
 def build_html(spec, css, w, h, standalone_size=True, blobs_markup=""):
     fonts = font_head(spec.get("fonts") or "google")
+    fam = ""
+    if spec.get("display_font") or spec.get("body_font"):
+        fams = [f for f in (spec.get("display_font"), spec.get("body_font")) if f]
+        q = "&".join("family=" + f.replace(" ", "+") + ":ital,wght@0,400;0,500;1,400" for f in fams)
+        fonts += f'<link href="https://fonts.googleapis.com/css2?{q}&display=swap" rel="stylesheet">'
+        fam = ".skin{" + (f'--skin-display:"{spec["display_font"]}";' if spec.get("display_font") else "") + (f'--skin-body:"{spec["body_font"]}";' if spec.get("body_font") else "") + "}"
+    align_cls = " skin-left" if spec.get("align") == "left" else ""
     panels = spec.get("panels") or []
     content = ""
     if not spec.get("blank"):
@@ -328,9 +396,37 @@ def build_html(spec, css, w, h, standalone_size=True, blobs_markup=""):
 {size_css}
 {css}
 {TYPE_CSS}
+{fam}
 </style></head>
-<body><section class="skin">{blobs_markup}<div class="skin-content">{content}</div></section></body></html>
+<body><section class="skin{align_cls}">{blobs_markup}<div class="skin-content">{content}</div></section></body></html>
 """
+
+
+# --------------------------------------------------------------------------- react
+def build_react(spec, css, blobs_markup):
+    """A drop-in React component: <Skin>children</Skin>. CSS is injected once via a <style> tag."""
+    bt = chr(96)
+    style = (css + TYPE_CSS).replace(bt, "\\" + bt)
+    blobs_js = ""
+    if blobs_markup:
+        safe = blobs_markup.replace(bt, "\\" + bt)
+        blobs_js = "<div aria-hidden dangerouslySetInnerHTML={{__html: " + bt + safe + bt + "}} />"
+    return (
+        "// Generated by gradient.skin - https://gradient.skin\n"
+        "// Usage: <Skin><h1 className=\"serif\">Not that gradient.</h1></Skin>\n"
+        "export const skinCss = " + bt + style + bt + ";\n\n"
+        "export default function Skin({ children, className = \"\", style }) {\n"
+        "  return (\n"
+        "    <>\n"
+        "      <style dangerouslySetInnerHTML={{ __html: skinCss }} />\n"
+        "      <section className={" + bt + "skin ${className}" + bt + "} style={style}>\n"
+        "        " + blobs_js + "\n"
+        "        <div className=\"skin-content\">{children}</div>\n"
+        "      </section>\n"
+        "    </>\n"
+        "  );\n"
+        "}\n"
+    )
 
 # --------------------------------------------------------------------------- svg (no browser needed)
 def build_svg(pal, blobs, leak, spec, w, h):
@@ -366,6 +462,26 @@ def build_svg(pal, blobs, leak, spec, w, h):
             f'<rect width="100%" height="100%" fill="{pal["base"]}"/>'
             f'<g filter="url(#blur)">{"".join(shapes)}</g>{grid}{text}</svg>')
 
+
+# --------------------------------------------------------------------------- contact sheet
+def build_sheet(seed=2, names=None):
+    names = names or list(PALETTES)
+    cells, styles = [], []
+    for n in names:
+        pal = PALETTES[n]
+        blobs, leak = make_blobs(pal, "split", random.Random(seed))
+        css = build_css(pal, blobs, leak, dict(grid=True, grid_size=18)).replace(".skin", f".p-{n}")
+        styles.append(css)
+        cells.append(f'<figure class="p-{n}"><figcaption class="mono">--palette {n}</figcaption></figure>')
+    return f"""<!doctype html><html><head><meta charset="utf-8">{font_head("local")}<style>
+html,body{{margin:0;background:#f6f5f1}} body{{padding:40px;font-family:Inter,system-ui,sans-serif}}
+h1{{font:400 40px "Instrument Serif",Georgia,serif;letter-spacing:-.02em;margin:0 0 20px;color:#121212}}
+.g{{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}} figure{{margin:0;aspect-ratio:16/10;border-radius:12px;display:flex;align-items:flex-end;padding:12px;box-sizing:border-box}}
+figcaption{{font:500 11px "JetBrains Mono",monospace;letter-spacing:.06em}} .mono{{}}
+{"".join(styles)}
+{" ".join(f'.p-{n}{{color:{PALETTES[n]["ink"]}}}' for n in names)}
+</style></head><body><h1>gradient.skin · {len(names)} palettes</h1><div class="g">{"".join(cells)}</div></body></html>"""
+
 # --------------------------------------------------------------------------- png
 def render_png(html_path, out, w, h, scale):
     here = os.path.dirname(os.path.abspath(__file__))
@@ -393,14 +509,22 @@ def render_png(html_path, out, w, h, scale):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--out", default="skin.html")
-    ap.add_argument("--format", choices=["html", "png", "svg", "css"], default=None, help="inferred from --out extension if omitted")
-    ap.add_argument("--size", default="1600x900", help="WxH px, e.g. 1200x630 (OG), 1600x900 (X), 1080x1080")
+    ap.add_argument("--format", choices=["html", "png", "svg", "css", "react", "jsx"], default=None, help="inferred from --out extension if omitted")
+    ap.add_argument("--size", default="1600x900", help="WxH px or a preset: " + ", ".join(SIZES))
     ap.add_argument("--scale", type=float, default=2, help="device pixel ratio for PNG (2 = retina)")
-    ap.add_argument("--palette", choices=sorted(PALETTES), default="dawn")
+    ap.add_argument("--palette", choices=sorted(PALETTES), default="dawn", metavar="NAME", help="one of: " + ", ".join(PALETTES))
+    ap.add_argument("--from-brand", metavar="HEX", help="derive a palette from one brand colour, e.g. #5B4BFF")
+    ap.add_argument("--dark", action="store_true", help="dark twin of the chosen palette (or of --from-brand)")
+    ap.add_argument("--list-palettes", action="store_true", help="print every palette with its hexes and mood, then exit")
+    ap.add_argument("--sheet", action="store_true", help="render a contact sheet of every palette to --out (png/html)")
     ap.add_argument("--colors", help="custom comma list of 8 hex colours: first 4 cool, last 4 warm")
     ap.add_argument("--base", help="paper colour override, e.g. #f7f6f2")
     ap.add_argument("--layout", choices=LAYOUTS, default="split")
-    ap.add_argument("--seed", type=int, default=1)
+    ap.add_argument("--seed", type=int, default=1, help="jitters blob placement; 0 = random")
+    ap.add_argument("--seeds", help="render several variants, e.g. 1-6 or 3,7,11; files get a -sN suffix")
+    ap.add_argument("--align", choices=["center", "left"], default="center")
+    ap.add_argument("--display-font", metavar="NAME", help="Google Font for the headline, e.g. \"Fraunces\"")
+    ap.add_argument("--body-font", metavar="NAME", help="Google Font for body text, e.g. \"Geist\"")
     ap.add_argument("--intensity", type=float, default=1.0, help="0.6 = whisper, 1.0 = reference, 1.3 = punchy")
     ap.add_argument("--no-grid", action="store_true")
     ap.add_argument("--grid-size", type=int, default=22)
@@ -417,13 +541,43 @@ def main():
     ap.add_argument("--badge"); ap.add_argument("--cta"); ap.add_argument("--href"); ap.add_argument("--footer")
     ap.add_argument("--responsive", action="store_true", help="HTML fills the viewport instead of fixed WxH")
     a = ap.parse_args()
+    if a.list_palettes:
+        print(list_palettes()); return
+    if a.seed == 0:
+        a.seed = random.randint(1, 9999)
+    if a.sheet:
+        out = a.out if a.out != "skin.html" else "palettes.png"
+        fmt = os.path.splitext(out)[1].lstrip(".").lower() or "png"
+        html = build_sheet()
+        hp = os.path.splitext(out)[0] + ".html"
+        with open(hp, "w") as f: f.write(html)
+        if fmt == "png": render_png(os.path.abspath(hp), os.path.abspath(out), 1800, 140 + 222 * ((len(PALETTES) + 4) // 5), 2)
+        print(f"wrote {out}  (contact sheet, {len(PALETTES)} palettes)"); return
+    if a.seeds:
+        # fan out into one run per seed
+        seeds = []
+        for part in a.seeds.split(","):
+            if "-" in part: lo, hi = part.split("-"); seeds += list(range(int(lo), int(hi) + 1))
+            else: seeds.append(int(part))
+        root, ext = os.path.splitext(a.out)
+        argv = [x for x in sys.argv[1:] if not x.startswith("--seeds")]
+        if "--seeds" in sys.argv:
+            i = sys.argv.index("--seeds"); argv = sys.argv[1:i] + sys.argv[i + 2:]
+        for sd in seeds:
+            sub = [x for x in argv]
+            if "--seed" in sub: j = sub.index("--seed"); sub[j + 1] = str(sd)
+            else: sub += ["--seed", str(sd)]
+            if "--out" in sub: j = sub.index("--out"); sub[j + 1] = f"{root}-s{sd}{ext}"
+            else: sub += ["--out", f"{root}-s{sd}{ext}"]
+            subprocess.run([sys.executable, os.path.abspath(__file__)] + sub, check=True)
+        return
 
     spec = {}
     if a.spec:
         with open(a.spec) as f:
             spec = json.load(f)
     # CLI flags override spec
-    for k in ("palette", "layout", "seed", "intensity", "grain", "fonts", "wordmark", "footer", "size", "base", "colors"):
+    for k in ("palette", "layout", "seed", "intensity", "grain", "fonts", "wordmark", "footer", "size", "base", "colors", "align", "display_font", "body_font", "from_brand"):
         v = getattr(a, k)
         if v not in (None, ap.get_default(k)) or k not in spec:
             spec[k] = v if v is not None else spec.get(k)
@@ -439,7 +593,13 @@ def main():
         spec["panels"] = [dict(eyebrow="gradient.skin", headline="Soft light,", italic="on demand.", sub="A pastel mesh gradient with a dot grid and editorial type. Change the words, keep the glow.", badge="Live", cta="Enter")]
         spec.setdefault("wordmark", "gradient.skin")
 
-    pal = dict(PALETTES[spec.get("palette") or "dawn"])
+    if spec.get("from_brand"):
+        pal = palette_from_brand(spec["from_brand"], dark=a.dark)
+        spec["palette"] = f"brand:{spec['from_brand']}"
+    else:
+        pal = dict(PALETTES[spec.get("palette") or "dawn"])
+        if a.dark or spec.get("dark"):
+            pal = darken_palette(pal)
     if spec.get("colors"):
         cs = parse_colors(spec["colors"]) if isinstance(spec["colors"], str) else spec["colors"]
         if len(cs) < 2: sys.exit("--colors needs at least 2 hex colours")
@@ -447,7 +607,7 @@ def main():
         pal["cool"], pal["warm"] = cs[:4], cs[4:8]
     if spec.get("base"): pal["base"] = spec["base"]
     if spec.get("ink"): pal["ink"] = spec["ink"]
-    if spec.get("palette") == "ink": spec["dark"] = True
+    if pal.get("dark"): spec["dark"] = True
 
     w, h = parse_size(spec.get("size") or a.size)
     rng = random.Random(int(spec.get("seed") or 1))
@@ -463,6 +623,10 @@ def main():
         if markup:
             sys.stdout.write("\n/* --animate: put this markup as the FIRST child of .skin */\n/*\n" + markup + "\n*/\n")
         return
+    if fmt in ("react", "jsx"):
+        out = a.out if a.out.endswith((".jsx", ".tsx", ".js")) else os.path.splitext(a.out)[0] + ".jsx"
+        with open(out, "w") as f: f.write(build_react(spec, css, markup))
+        print(f"wrote {out}  (react component; import Skin from './{os.path.basename(out)}')"); return
     if fmt == "svg":
         with open(a.out, "w") as f: f.write(build_svg(pal, blobs, leak, spec, w, h))
     elif fmt == "html":

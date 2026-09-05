@@ -41,8 +41,8 @@ the image does the selling. Lowercase is fine on X; the serif in the image carri
 
 **2/** · image: `images/palettes.png`
 
-> seven palettes built in — dawn, sorbet, glacier, dusk, meadow, ember, and ink for dark mode.
-> or give it your brand hex and it derives one. `--colors` does the rest
+> twenty palettes built in, sixteen light and four dark, and every one has a dark twin.
+> or give it your brand hex and it derives one. `--from-brand` does the rest
 
 **3/** · image: `images/one-prompt.png`
 

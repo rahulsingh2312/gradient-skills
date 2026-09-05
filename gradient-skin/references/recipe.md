@@ -68,6 +68,9 @@ Tailwind arbitrary values can't contain spaces — use `_`. For anything longer 
 
 ## 4. React component (drop-in)
 
+`python3 scripts/skin.py --palette ocean --animate --format react --out Skin.jsx` writes a ready
+`<Skin>` component with the CSS bundled. The hand-rolled version:
+
 ```tsx
 export function gradient.skin({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return <section className={`skin ${className}`}>{children}</section>;

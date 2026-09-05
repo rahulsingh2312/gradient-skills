@@ -39,7 +39,7 @@ python3 gradient-skin/scripts/skin.py --responsive --out hero.html          # st
 Pure standard-library Python. PNG export needs Node + Playwright once:
 `npm i -g playwright && npx playwright install chromium`. HTML, CSS, and SVG need nothing.
 
-Palettes: `dawn` `sorbet` `glacier` `dusk` `meadow` `ember` `ink` (dark), or `--colors` with your own.
+Palettes: 16 light (`dawn` `sorbet` `glacier` `dusk` `meadow` `ember` `peach` `lilac` `ocean` `citrus` `rose` `sand` `mint` `aurora` `candy` `slate`), 4 dark (`ink` `midnight` `graphite` `nightfall`), `--dark` for a dark twin of any, `--from-brand #hex` to derive one, or `--colors` with your own.
 Add `--animate` and the blobs drift slowly, like light on water.
 Layouts: `split` `corners` `wash` `halo`. See `gradient-skin/SKILL.md` for the full set of flags and the design
 rules, `gradient-skin/references/recipe.md` for hand-writing it into React/Tailwind.

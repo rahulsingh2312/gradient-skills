@@ -74,7 +74,7 @@ The script underneath is plain Python, no packages, and it outputs whatever you 
 - an SVG if there's no browser around
 - PNGs at any size, for OG images, X cards, wallpapers
 
-Seven palettes are built in. One is the reference look. Five are variations on the same rules. One is dark.
+Twenty palettes are built in, sixteen light and four dark, and any of them has a dark twin. Give it a brand colour and it derives one that keeps the temperature split.
 
 *[image: images/one-prompt.png]*
 

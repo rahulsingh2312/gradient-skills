@@ -7,7 +7,7 @@ skin = importlib.util.module_from_spec(spec); spec.loader.exec_module(skin)
 
 REPO = "https://github.com/rahulsingh2312/gradient-skills"
 SITE = "https://gradient-skin.vercel.app"   # switch to https://gradient.skin once the domain resolves
-PALS = ["dawn", "sorbet", "glacier", "dusk", "meadow", "ember", "ink"]
+PALS = list(skin.PALETTES)
 
 def gradient(pal_name, seed, animate=False, cls=None, intensity=1.0):
     pal = dict(skin.PALETTES[pal_name])
@@ -84,10 +84,10 @@ h1{{font-size:clamp(56px,7.6vw,128px);line-height:.92;letter-spacing:-.025em;mar
 
 section.plain{{max-width:1100px;margin:0 auto;padding:96px 6vw}}
 h2{{font-size:clamp(36px,4.5vw,56px);letter-spacing:-.02em;line-height:1;margin:0 0 12px}} .lede{{opacity:.6;font-size:17px;max-width:52ch;margin:0 0 40px;line-height:1.55}}
-.grid{{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}}
+.grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}}
 .tile{{display:flex;align-items:flex-end;aspect-ratio:16/10;border-radius:18px;padding:18px;text-decoration:none;font-size:14px;color:inherit;overflow:hidden;transition:transform .2s}} .tile:hover{{transform:translateY(-2px)}}
 {tiles_css}
-.sk-ink{{color:#f2f0ea}}
+.sk-ink,.sk-midnight,.sk-graphite,.sk-nightfall{{color:#f2f0ea}}
 .steps{{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px}} .step h3{{font-size:28px;margin:0 0 8px;letter-spacing:-.02em}} .step p{{opacity:.62;line-height:1.55;margin:0 0 12px}}
 pre{{background:#121212;color:#f2f0ea;border-radius:12px;padding:18px 20px;font-size:13px;line-height:1.9;overflow-x:auto;margin:0;white-space:pre}} pre.soft{{white-space:pre-wrap}}
 footer{{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5}} footer a{{color:inherit}}
@@ -96,6 +96,8 @@ footer{{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5}} foot
   .cmd{{font-size:12px;padding:0 14px;gap:10px}}
   section.plain{{padding:72px 6vw}}
   .grid{{grid-template-columns:1fr;gap:16px}} .tile{{aspect-ratio:16/10;border-radius:14px}}
+}}
+@media (min-width:761px) and (max-width:1000px){{ .grid{{grid-template-columns:repeat(2,1fr)}}
   .steps{{gap:36px}} pre{{font-size:12px;padding:16px 16px;line-height:2}}
   .tag{{top:14px;font-size:9px;letter-spacing:.22em;padding:5px 9px}} .tag.l{{left:14px}} .tag.r{{right:14px}} .tag b{{display:none}} .wordmark{{top:48px;font-size:22px}}
 }}
@@ -125,8 +127,8 @@ footer{{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5}} foot
 </section>
 
 <section class="plain" id="palettes">
-  <h2 class="serif">Seven palettes, <em>plus yours.</em></h2>
-  <p class="lede">Every tile below is the same CSS recipe with a different colour set. Pass a brand hex and gradient.skin derives the eighth.</p>
+  <h2 class="serif">Twenty palettes, <em>plus yours.</em></h2>
+  <p class="lede">Every tile is the same recipe with a different colour set. Sixteen light, four dark, and any of them has a dark twin. Pass a brand hex and it derives one for you.</p>
   <div class="grid">{tiles}</div>
 </section>
 
@@ -138,10 +140,10 @@ footer{{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5}} foot
     <div class="step"><h3 class="serif">2. Ask</h3><p>Describe the hero. Mention a palette, a brand colour, or nothing.</p><pre class="soft">/gradient-skin launch hero,
 palette meadow, animated,
 export OG + X images</pre></div>
-    <div class="step"><h3 class="serif">3. Ship</h3><p>Get a responsive page, a CSS block for your codebase, an SVG, or PNGs.</p><pre>hero.html
+    <div class="step"><h3 class="serif">3. Ship</h3><p>A responsive page, a CSS block, a React component, an SVG, or PNGs at any size.</p><pre>hero.html
 skin.css
-og.png
-hero-x.png</pre></div>
+Skin.jsx
+og.png</pre></div>
   </div>
 </section>
 <footer class="mono">GRADIENT.SKIN · A CLAUDE CODE SKILL · <a href="{REPO}">github.com/rahulsingh2312/gradient-skills</a></footer>
