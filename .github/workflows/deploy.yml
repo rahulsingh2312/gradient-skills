@@ -38,7 +38,7 @@ jobs:
       - name: Build the site
         env:
           POSTHOG_KEY: ${{ secrets.POSTHOG_KEY }}
-          POSTHOG_HOST: ${{ vars.POSTHOG_HOST }}
+          POSTHOG_HOST: ${{ secrets.POSTHOG_HOST || vars.POSTHOG_HOST }}
         run: python3 site/build.py
 
       - name: Link the repo to the Vercel project (creates it on first run)

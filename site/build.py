@@ -16,7 +16,9 @@ PALS = list(skin.PALETTES)
 VERCEL_ANALYTICS = os.environ.get("VERCEL_ANALYTICS", "1") not in ("0", "false", "no")
 # project API key — public by design (client-side); the EU region needs POSTHOG_HOST=https://eu.i.posthog.com
 POSTHOG_KEY = os.environ.get("POSTHOG_KEY", "").strip() or "phc_DbePBSpu6KZ6JAd7RB69HDwGpouik55B8ZciK7cGCFb4"
-POSTHOG_HOST = os.environ.get("POSTHOG_HOST", "").strip() or "https://us.i.posthog.com"
+POSTHOG_HOST = os.environ.get("POSTHOG_HOST", "").strip()
+if not POSTHOG_HOST.startswith("http"):   # ignore anything that is not a host
+    POSTHOG_HOST = "https://us.i.posthog.com"
 
 analytics_head = ""
 if VERCEL_ANALYTICS:
