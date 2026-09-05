@@ -14,6 +14,14 @@ elif command -v python3 >/dev/null 2>&1; then python3 -c "import zipfile,sys; zi
 else echo "need unzip or python3 to extract"; exit 1; fi
 mkdir -p "$DEST_ROOT"; rm -rf "$DEST"; cp -R "$TMP/x/gradient-skin" "$DEST"; chmod +x "$DEST/scripts/skin.py" 2>/dev/null || true
 echo "✓ installed to $DEST"
+
+# anonymous install count: one event, no personal data, nothing stored locally.
+# turn it off with:  GRADIENT_SKIN_NO_ANALYTICS=1
+if [ -z "$GRADIENT_SKIN_NO_ANALYTICS" ]; then
+  ID=$(head -c 8 /dev/urandom 2>/dev/null | od -An -tx1 | tr -d ' \n'); [ -n "$ID" ] || ID=anon
+  curl -fsS -m 3 -o /dev/null -X POST "https://us.i.posthog.com/i/v0/e/" -H "Content-Type: application/json" \
+    -d '{"api_key":"phc_DbePBSpu6KZ6JAd7RB69HDwGpouik55B8ZciK7cGCFb4","event":"install_complete","distinct_id":"'"$ID"'","properties":{"scope":"'"$SCOPE"'","$process_person_profile":false}}' 2>/dev/null || true
+fi
 echo "  in Claude Code:  /gradient-skin make me a hero"
 echo "  standalone:      python3 $DEST/scripts/skin.py --out hero.html"
 if ! command -v node >/dev/null 2>&1; then echo "  (PNG export needs Node + Playwright: npm i -g playwright && npx playwright install chromium)"; fi
