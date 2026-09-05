@@ -108,7 +108,7 @@ footer{{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5}} foot
     <div class="wordmark">gradient.skin</div>
     <div class="eyebrow mono">Claude Code skill</div>
     <h1>Not that<br><em>gradient.</em></h1>
-    <p class="sub">The blue-to-pink one every AI reaches for. One prompt swaps it for soft light on paper. HTML, CSS, SVG or PNG.</p>
+    <p class="sub">Every model reaches for the same blue-to-pink. Ask once and you get soft light on paper instead, in your colours.</p>
     <button class="cmd mono" data-copy><span>curl -fsSL gradient.skin/install | sh</span><small>copy</small></button>
     <div class="links"><a href="{REPO}">GitHub →</a><a href="#palettes">Palettes →</a></div>
     <div class="foot mono">Open source · MIT · gradient.skin</div>
@@ -117,7 +117,7 @@ footer{{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5}} foot
     <div class="wordmark serif">gradient.skin</div>
     <div class="eyebrow mono">Claude Code skill</div>
     <h1 class="serif">Not that<br><em>gradient.</em></h1>
-    <p class="sub">The blue-to-pink one every AI reaches for. One prompt swaps it for soft light on paper. HTML, CSS, SVG or PNG.</p>
+    <p class="sub">Every model reaches for the same blue-to-pink. Ask once and you get soft light on paper instead, in your colours.</p>
     <button class="cmd mono" data-copy><span>curl -fsSL gradient.skin/install | sh</span><small>copy</small></button>
     <div class="links"><a href="{REPO}">GitHub →</a><a href="#palettes">Palettes →</a></div>
     <div class="foot mono">Open source · MIT · gradient.skin</div>
@@ -137,13 +137,8 @@ footer{{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5}} foot
   <p class="lede">A folder with a SKILL.md and a Python script. No packages, no build. Prefer files? <a href="/skill" style="color:inherit">Download the .skill</a> or grab it on <a href="{REPO}" style="color:inherit">GitHub</a>.</p>
   <div class="steps">
     <div class="step"><h3 class="serif">1. Install</h3><p>One line. Puts the skill in your Claude Code skills folder.</p><pre>curl -fsSL gradient.skin/install | sh</pre></div>
-    <div class="step"><h3 class="serif">2. Ask</h3><p>Describe the hero. Mention a palette, a brand colour, or nothing.</p><pre class="soft">/gradient-skin launch hero,
-palette meadow, animated,
-export OG + X images</pre></div>
-    <div class="step"><h3 class="serif">3. Ship</h3><p>A responsive page, a CSS block, a React component, an SVG, or PNGs at any size.</p><pre>hero.html
-skin.css
-Skin.jsx
-og.png</pre></div>
+    <div class="step"><h3 class="serif">2. Ask</h3><p>Describe the hero. Mention a palette, a brand colour, or nothing.</p><pre class="soft">/gradient-skin launch hero, palette meadow, animated, export OG + X images</pre></div>
+    <div class="step"><h3 class="serif">3. Ship</h3><p>Take the whole page, or just the part you need. It lands in whatever your project already speaks.</p><pre class="soft">hero.html · skin.css · Skin.jsx · og.png</pre></div>
   </div>
 </section>
 <footer class="mono">GRADIENT.SKIN · A CLAUDE CODE SKILL · <a href="{REPO}">github.com/rahulsingh2312/gradient-skills</a></footer>

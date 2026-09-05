@@ -11,6 +11,8 @@
 | `images/palettes.png` | 1600×900 — thread post 2 |
 | `images/one-prompt.png` | 1600×900 — the "demo" post |
 | `images/wallpaper.png` | 2560×1440 — giveaway |
+| `images/article-two-tweets.png` | 1600×900 — the "their post → ours" image inside the article |
+| `compose.py` | rebuilds that image with the real post pasted in |
 
 Regenerate after editing `hero.json`:
 
@@ -18,6 +20,20 @@ Regenerate after editing `hero.json`:
 python3 gradient-skin/scripts/skin.py --spec launch/hero.json --size 1600x900 --out launch/images/hero-x.png
 python3 gradient-skin/scripts/skin.py --spec launch/hero.json --size 1200x630 --out launch/images/og.png
 ```
+
+## The two-post image
+
+The post the article opens with is https://x.com/ryandavogel/status/1956365206147244167. X blocks
+downloads from here, so screenshot it yourself and pass the file:
+
+```bash
+python3 launch/compose.py --shot ~/Downloads/ryan.png              # side by side
+python3 launch/compose.py --shot ~/Downloads/ryan.png --layout stacked   # theirs on top, ours below
+python3 launch/compose.py                                          # no screenshot: quoted card + permalink
+```
+
+In the article itself, paste that URL on its own line so X renders the real post as an embed, then put
+the image under it.
 
 ## Article covers (`images/covers/`)
 

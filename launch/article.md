@@ -25,13 +25,19 @@ Every AI reaches for the same blue-to-pink. Here's why the good landing pages lo
 
 ---
 
-Last month a tweet with 111,000 views was just a screenshot of a gradient. Blue on the left, purple in the middle, pink on the right. The caption said "pov you are about to look at the worst code ever generated."
+Last month [a post with 111,000 views](https://x.com/ryandavogel/status/1956365206147244167) was just a screenshot of a gradient. Blue on the left, purple in the middle, pink on the right. The caption said "pov you are about to look at the worst code ever generated."
 
 Nobody needed the code. Everyone already knew.
 
 That gradient is the sound of an AI saying "make it look modern." It's in the Tailwind docs, it's in ten thousand tutorials, it's the first thing every model reaches for when nobody tells it what beautiful means. `from-blue-500 via-purple-500 to-pink-500`. You've shipped it. I've shipped it.
 
+*[embed: https://x.com/ryandavogel/status/1956365206147244167 — paste the URL on its own line in the X article editor so the real post renders inline]*
+
 *[image: images/article-two-tweets.png]*
+
+> Rebuild that image with the actual post inside it: screenshot the post, then run
+> `python3 launch/compose.py --shot ~/Downloads/ryan.png` (add `--layout stacked` for his on top, ours below).
+> Without `--shot` it falls back to a quoted card that carries the handle, the view count and the permalink.
 
 Meanwhile the landing pages people actually screenshot and send each other look nothing like that. Linear. Arc. Raycast. Half the good YC pages this year. Same trick every time: a sheet of near-white paper with soft pools of colour bleeding in from the edges, a dot grid you can barely see, one serif headline, second line in italic.
 
