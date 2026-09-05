@@ -69,12 +69,16 @@ h1{{font-size:clamp(56px,7.6vw,128px);line-height:.92;letter-spacing:-.025em;mar
 .tag{{position:absolute;z-index:4;top:22px;font-size:10px;letter-spacing:.32em;text-transform:uppercase;padding:7px 12px;border-radius:7px;pointer-events:none;transition:opacity .3s}}
 .tag b{{font-weight:inherit}} .tag.l{{left:22px;background:rgba(0,0,0,.28);color:#fff}} .tag.r{{right:22px;background:rgba(255,255,255,.6);color:#121212;backdrop-filter:blur(6px)}}
 .hero[data-cut="0"] .tag.l{{opacity:0}} .hero[data-cut="100"] .tag.r{{opacity:0}}
-.grip{{position:absolute;z-index:5;top:0;bottom:0;left:clamp(44px,var(--cut,92%),calc(100% - 44px));width:64px;transform:translateX(-50%);cursor:ew-resize;touch-action:pan-y;outline:none}}
-.grip::before{{content:"";position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.12)}}
-.grip i{{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:52px;height:52px;border-radius:50%;background:#121212;color:#fff;display:flex;align-items:center;justify-content:center;font:500 18px "JetBrains Mono",monospace;letter-spacing:-.05em;box-shadow:0 10px 30px rgba(0,0,0,.3);font-style:normal;transition:transform .2s}}
-.grip:hover i,.grip:focus-visible i{{transform:translate(-50%,-50%) scale(1.08)}}
-.grip:focus-visible i{{box-shadow:0 0 0 3px #fff,0 10px 30px rgba(0,0,0,.3)}}
-.grip b{{position:absolute;left:50%;top:calc(50% + 40px);transform:translateX(-50%);font:500 10px "JetBrains Mono",monospace;letter-spacing:.3em;text-transform:uppercase;color:#121212;background:rgba(255,255,255,.7);padding:5px 9px;border-radius:6px;white-space:nowrap;opacity:0;transition:opacity .3s}}
+.grip{{position:absolute;z-index:5;top:0;bottom:0;left:var(--cut,92%);width:0;cursor:ew-resize;touch-action:pan-y;outline:none}}
+.grip::before{{content:"";position:absolute;top:0;bottom:0;left:-1px;width:2px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.14)}}
+.grip::after{{content:"";position:absolute;top:0;bottom:0;left:-32px;width:64px}}
+.grip i{{position:absolute;top:50%;left:0;transform:translate(-50%,-50%);width:22px;height:68px;background:#121212;display:flex;align-items:center;justify-content:center;gap:3px;box-shadow:0 10px 26px rgba(0,0,0,.28);font-style:normal;transition:transform .25s,width .2s}}
+.grip i::before,.grip i::after,.grip i span{{content:"";display:block;width:1px;height:22px;background:rgba(255,255,255,.75)}}
+.grip:hover i,.grip:focus-visible i{{width:26px}}
+.grip:focus-visible i{{box-shadow:0 0 0 2px #fff,0 10px 26px rgba(0,0,0,.28)}}
+.hero[data-cut="0"] .grip i{{transform:translate(0,-50%)}} .hero[data-cut="100"] .grip i{{transform:translate(-100%,-50%)}}
+.grip b{{position:absolute;left:18px;top:calc(50% + 48px);font:500 10px "JetBrains Mono",monospace;letter-spacing:.3em;text-transform:uppercase;color:#121212;background:#fff;padding:6px 9px;white-space:nowrap;opacity:0;transition:opacity .3s;box-shadow:0 1px 0 rgba(0,0,0,.12)}}
+.hero[data-cut="0"] .grip b{{left:8px}} .hero[data-cut="100"] .grip b{{left:auto;right:8px}}
 .hero.settled .grip b{{opacity:1}}
 @media (prefers-reduced-motion:reduce){{.grip i{{transition:none}}}}
 
@@ -117,7 +121,7 @@ footer{{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5}} foot
     <div class="foot mono">Open source · MIT · gradient.skin</div>
   </div></section></div>
   <span class="tag mono l">Before</span><span class="tag mono r">After<b> · one prompt</b></span>
-  <div class="grip" role="slider" tabindex="0" aria-label="Compare the template gradient with gradient.skin" aria-valuemin="0" aria-valuemax="100" aria-valuenow="92"><i>&lt;&gt;</i><b>drag me</b></div>
+  <div class="grip" role="slider" tabindex="0" aria-label="Compare the template gradient with gradient.skin" aria-valuemin="0" aria-valuemax="100" aria-valuenow="92"><i><span></span></i><b>drag</b></div>
 </section>
 
 <section class="plain" id="palettes">

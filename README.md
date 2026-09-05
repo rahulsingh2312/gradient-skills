@@ -53,20 +53,6 @@ launch/          X posts, domain shortlist, launch images and the spec that made
 site/            landing page (index.html + og.png); `python3 site/build.py` regenerates it from the skill
 ```
 
-## Deploy the site
-
-The landing page is a static folder, so any host works. For Vercel:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/rahulsingh2312/gradient-skills&project-name=gradient-skin&repository-name=gradient-skills)
-
-or from a terminal: `npx vercel --prod` in the repo root. `vercel.json` already points the output at `site/`,
-there is no build step. Then add `gradient.skin` as the project domain.
-
-**Auto-deploy on every push** is wired up in `.github/workflows/deploy.yml`. It needs one repository
-secret, `VERCEL_TOKEN` (a token from vercel.com/account/tokens). Add it under
-Settings → Secrets and variables → Actions → New repository secret. The default branch deploys to
-production; every other branch gets a preview URL in the Actions run summary.
-
 ## License
 
 MIT for the code and docs. Bundled fonts (Instrument Serif, Inter, JetBrains Mono) are under the
