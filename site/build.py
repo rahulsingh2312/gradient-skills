@@ -15,7 +15,7 @@ PALS = list(skin.PALETTES)
 # optional: paste the project key here or export POSTHOG_KEY before building.
 VERCEL_ANALYTICS = os.environ.get("VERCEL_ANALYTICS", "1") not in ("0", "false", "no")
 # project API key — public by design (client-side); the EU region needs POSTHOG_HOST=https://eu.i.posthog.com
-POSTHOG_KEY = os.environ.get("POSTHOG_KEY", "phc_DbePBSpu6KZ6JAd7RB69HDwGpouik55B8ZciK7cGCFb4").strip()
+POSTHOG_KEY = os.environ.get("POSTHOG_KEY", "").strip() or "phc_DbePBSpu6KZ6JAd7RB69HDwGpouik55B8ZciK7cGCFb4"
 POSTHOG_HOST = os.environ.get("POSTHOG_HOST", "").strip() or "https://us.i.posthog.com"
 
 analytics_head = ""
