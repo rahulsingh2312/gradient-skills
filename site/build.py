@@ -13,9 +13,9 @@ PALS = list(skin.PALETTES)
 # Vercel Web Analytics is cookieless and needs no key: flip it on in the Vercel
 # project (Analytics tab) and the script below starts reporting. PostHog is
 # optional: paste the project key here or export POSTHOG_KEY before building.
-VERCEL_ANALYTICS = True
-POSTHOG_KEY = os.environ.get("POSTHOG_KEY", "")
-POSTHOG_HOST = os.environ.get("POSTHOG_HOST", "https://us.i.posthog.com")
+VERCEL_ANALYTICS = os.environ.get("VERCEL_ANALYTICS", "1") not in ("0", "false", "no")
+POSTHOG_KEY = os.environ.get("POSTHOG_KEY", "").strip()
+POSTHOG_HOST = os.environ.get("POSTHOG_HOST", "").strip() or "https://us.i.posthog.com"
 
 analytics_head = ""
 if VERCEL_ANALYTICS:

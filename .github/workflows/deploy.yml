@@ -32,6 +32,15 @@ jobs:
         with:
           node-version: 22
 
+      # Rebuilds site/index.html so the PostHog key can live in a repository
+      # secret instead of the source. Skip the secret and the site builds
+      # exactly as committed, analytics off.
+      - name: Build the site
+        env:
+          POSTHOG_KEY: ${{ secrets.POSTHOG_KEY }}
+          POSTHOG_HOST: ${{ vars.POSTHOG_HOST }}
+        run: python3 site/build.py
+
       - name: Link the repo to the Vercel project (creates it on first run)
         run: npx --yes vercel@latest link --yes --project gradient-skin --token "$VERCEL_TOKEN"
 
