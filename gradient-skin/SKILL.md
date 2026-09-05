@@ -24,7 +24,7 @@ Only open the references when you need them:
 S=<path-to-this-skill>/scripts/skin.py
 
 # 1. A finished hero as a standalone HTML page (Google Fonts, responsive)
-python3 $S --responsive --wordmark "Acme." --eyebrow "Beta" \
+python3 $S --responsive --palette meadow --wordmark "Meadow." --eyebrow "Beta" \
   --headline "Ship the" --italic "boring parts." \
   --sub "Infra that stays out of your way." --badge "Live" --cta "Get started" --out hero.html
 
