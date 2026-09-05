@@ -48,85 +48,46 @@ html,body{margin:0} body{font-family:Inter,ui-sans-serif,system-ui,sans-serif;-w
 .skin::before { z-index:1; } .skin::after { z-index:1; } .skin-content { z-index:2; }
 
 
-.skin{min-height:100vh}
-.wrap{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 6vw 96px}
+
+/* ---- hero = the comparison. Same words on both layers; only the skin changes. ---- */
+.hero{position:relative;min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none}
+.layer{position:absolute;inset:0;isolation:isolate} .ugly{z-index:1} .good{z-index:2}
+.ugly{background:linear-gradient(90deg,#3b82f6 0%,#a855f7 50%,#ec4899 100%);color:#fff}
+.good{clip-path:inset(0 0 0 var(--cut,92%))}
+.good .skin{position:absolute;inset:0;min-height:0}
+.wrap{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 6vw 96px;box-sizing:border-box}
 .wordmark{position:absolute;top:34px;left:0;right:0;text-align:center;font-size:26px;letter-spacing:-.01em}
-.eyebrow{font-size:11px;letter-spacing:.38em;text-transform:uppercase;opacity:.5;margin-bottom:22px}
-h1{font-size:clamp(56px,7.6vw,128px);line-height:.92;letter-spacing:-.025em;margin:0 0 22px} h1 em{font-style:italic}
-.sub{font-size:19px;line-height:1.5;opacity:.62;max-width:36ch;margin:0 0 30px}
-.cmd{display:inline-flex;align-items:center;gap:14px;max-width:100%;box-sizing:border-box;font-size:14px;padding:12px 18px;border-radius:999px;border:1px solid rgba(0,0,0,.14);background:rgba(255,255,255,.55);backdrop-filter:blur(6px);cursor:pointer;color:inherit}
+.ugly .wordmark{font-weight:700;letter-spacing:-.02em}
+.eyebrow{font-size:11px;letter-spacing:.38em;text-transform:uppercase;opacity:.5;margin-bottom:22px;height:14px}
+.ugly .eyebrow{opacity:.85}
+h1{font-size:clamp(56px,7.6vw,128px);line-height:.92;letter-spacing:-.025em;margin:0 0 22px;height:calc(2 * .92em)} h1 em{font-style:italic}
+.ugly h1{font-weight:700;letter-spacing:-.045em;text-shadow:0 2px 18px rgba(0,0,0,.25)} .ugly h1 em{font-style:normal}
+.sub{font-size:19px;line-height:1.5;opacity:.62;max-width:36ch;margin:0 0 30px;min-height:calc(3 * 1.5em)}
+.ugly .sub{opacity:.92}
+.cmd{display:inline-flex;align-items:center;gap:14px;max-width:100%;box-sizing:border-box;height:44px;font-size:14px;padding:0 18px;border-radius:999px;border:1px solid rgba(0,0,0,.14);background:rgba(255,255,255,.55);backdrop-filter:blur(6px);cursor:pointer;color:inherit;font-family:inherit}
 .cmd span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cmd small{flex-shrink:0;white-space:nowrap;opacity:.5;font-size:11px;letter-spacing:.2em;text-transform:uppercase}
 .cmd:hover{background:rgba(255,255,255,.8)}
-.links{margin-top:28px;font-size:15px;font-weight:500} .links a{color:inherit;text-decoration:none;margin:6px 12px;display:inline-block;white-space:nowrap} .links a:hover{text-decoration:underline}
+.ugly .cmd{background:#fff;color:#7c3aed;border-color:transparent;box-shadow:0 8px 24px rgba(0,0,0,.25);font-weight:700} .ugly .cmd small{opacity:.6}
+.links{margin-top:28px;font-size:15px;font-weight:500;height:28px} .links a{color:inherit;text-decoration:none;margin:6px 12px;display:inline-block;white-space:nowrap} .links a:hover{text-decoration:underline}
 .foot{position:absolute;bottom:22px;left:0;right:0;text-align:center;font-size:10px;letter-spacing:.32em;text-transform:uppercase;opacity:.42}
+.ugly .foot{opacity:.8}
+.tag{position:absolute;z-index:4;top:22px;font-size:10px;letter-spacing:.32em;text-transform:uppercase;padding:7px 12px;border-radius:999px;pointer-events:none;transition:opacity .3s}
+.tag b{font-weight:inherit} .tag.l{left:22px;background:rgba(0,0,0,.28);color:#fff} .tag.r{right:22px;background:rgba(255,255,255,.6);color:#121212;backdrop-filter:blur(6px)}
+.hero[data-cut="0"] .tag.l{opacity:0} .hero[data-cut="100"] .tag.r{opacity:0}
+.grip{position:absolute;z-index:5;top:0;bottom:0;left:clamp(44px,var(--cut,92%),calc(100% - 44px));width:64px;transform:translateX(-50%);cursor:ew-resize;touch-action:pan-y;outline:none}
+.grip::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.grip i{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:52px;height:52px;border-radius:50%;background:#121212;color:#fff;display:flex;align-items:center;justify-content:center;font:500 18px "JetBrains Mono",monospace;letter-spacing:-.05em;box-shadow:0 10px 30px rgba(0,0,0,.3);font-style:normal;transition:transform .2s}
+.grip:hover i,.grip:focus-visible i{transform:translate(-50%,-50%) scale(1.08)}
+.grip:focus-visible i{box-shadow:0 0 0 3px #fff,0 10px 30px rgba(0,0,0,.3)}
+.grip b{position:absolute;left:50%;top:calc(50% + 40px);transform:translateX(-50%);font:500 10px "JetBrains Mono",monospace;letter-spacing:.3em;text-transform:uppercase;color:#121212;background:rgba(255,255,255,.7);padding:5px 9px;border-radius:999px;white-space:nowrap;opacity:0;transition:opacity .3s}
+.hero.settled .grip b{opacity:1}
+@media (prefers-reduced-motion:reduce){.grip i{transition:none}}
+
 section.plain{max-width:1100px;margin:0 auto;padding:96px 6vw}
 h2{font-size:clamp(36px,4.5vw,56px);letter-spacing:-.02em;line-height:1;margin:0 0 12px} .lede{opacity:.6;font-size:17px;max-width:52ch;margin:0 0 40px;line-height:1.55}
-
-/* ---- before / after slider ---- */
-.compare{position:relative;aspect-ratio:16/9;border-radius:18px;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:pan-y;box-shadow:0 1px 0 rgba(0,0,0,.06),0 24px 60px -30px rgba(0,0,0,.25)}
-.layer{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 8%;box-sizing:border-box}
-.before{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff}
-.before h3{font:700 clamp(34px,6vw,84px)/1 Inter,sans-serif;letter-spacing:-.03em;margin:0 0 14px;text-shadow:0 2px 12px rgba(0,0,0,.25)}
-.before p{font:400 clamp(13px,1.6vw,20px)/1.4 Inter,sans-serif;opacity:.9;margin:0 0 22px;max-width:30ch}
-.before .btn{background:linear-gradient(#fff,#e8e8f5);color:#5b4bd6;font:700 clamp(12px,1.4vw,17px) Inter,sans-serif;padding:.8em 1.6em;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.25)}
-.after{clip-path:inset(0 0 0 var(--cut,50%));overflow:hidden}
-
-.after-skin {
-  --skin-base: #f6f5f1;
-  --skin-ink: #121212;
-  position:relative; overflow:hidden; isolation:isolate;
-  background-color: var(--skin-base);
-  background-image:
-    radial-gradient(ellipse 34% 75% at 52% 30%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.55) 38%, rgba(255,255,255,0.00) 72%),
-    radial-gradient(ellipse 40% 56% at 3% 8%, rgba(182,240,220,1.00) 0%, rgba(182,240,220,0.55) 32%, rgba(182,240,220,0.00) 68%),
-    radial-gradient(ellipse 34% 64% at 29% 38%, rgba(207,225,255,0.98) 0%, rgba(207,225,255,0.54) 32%, rgba(207,225,255,0.00) 68%),
-    radial-gradient(ellipse 50% 50% at 12% 63%, rgba(215,205,247,0.98) 0%, rgba(215,205,247,0.54) 32%, rgba(215,205,247,0.00) 68%),
-    radial-gradient(ellipse 48% 36% at 25% 96%, rgba(243,196,230,1.00) 0%, rgba(243,196,230,0.55) 32%, rgba(243,196,230,0.00) 68%),
-    radial-gradient(ellipse 44% 63% at 95% 10%, rgba(242,219,149,1.00) 0%, rgba(242,219,149,0.55) 32%, rgba(242,219,149,0.00) 68%),
-    radial-gradient(ellipse 43% 56% at 72% 22%, rgba(249,239,198,0.92) 0%, rgba(249,239,198,0.51) 32%, rgba(249,239,198,0.00) 68%),
-    radial-gradient(ellipse 44% 60% at 94% 55%, rgba(248,214,192,0.98) 0%, rgba(248,214,192,0.54) 32%, rgba(248,214,192,0.00) 68%),
-    radial-gradient(ellipse 51% 49% at 80% 104%, rgba(248,226,220,1.00) 0%, rgba(248,226,220,0.55) 32%, rgba(248,226,220,0.00) 68%);
-  background-repeat:no-repeat; background-size:100% 100%;
-  color: var(--skin-ink);
-}
-.after-skin::before {
-  content:""; position:absolute; inset:0; pointer-events:none;
-  background-image: radial-gradient(rgba(15,15,15,.09) 0.9px, transparent 1.1px);
-  background-size: 22px 22px;
-  mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, #000 40%, transparent 100%);
-}
-.after-blobs { position:absolute; inset:-12%; pointer-events:none; z-index:0; overflow:hidden; }
-.after-blob  { position:absolute; border-radius:50%; will-change:transform;
-              animation: after-drift var(--d,30s) ease-in-out var(--delay,0s) infinite alternate; }
-.after-leak  { position:absolute; border-radius:50%; will-change:transform;
-              animation: after-drift 40s ease-in-out -7s infinite alternate; }
-@keyframes after-drift {
-  0%   { transform: translate(0,0) scale(1) rotate(0deg); }
-  33%  { transform: translate(var(--x1), var(--y1)) scale(1.07) rotate(3deg); }
-  66%  { transform: translate(var(--x2), var(--y2)) scale(.95) rotate(-2deg); }
-  100% { transform: translate(var(--x3), var(--y3)) scale(1.04) rotate(1deg); }
-}
-@media (prefers-reduced-motion: reduce) { .after-blob, .after-leak { animation:none; } }
-.after-skin::before { z-index:1; } .after-skin::after { z-index:1; } .after-content { z-index:2; }
-
-
-.after-skin{position:absolute;inset:0}
-.after-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:0 8%;box-sizing:border-box;text-align:center}
-.after h3{font-size:clamp(38px,6.6vw,96px);line-height:.92;letter-spacing:-.03em;margin:0 0 14px} .after h3 em{font-style:italic}
-.after p{font-size:clamp(13px,1.6vw,19px);line-height:1.45;opacity:.62;margin:0 0 22px;max-width:32ch}
-.after .cta{font-weight:500;font-size:clamp(13px,1.4vw,18px)}
-.tag{position:absolute;z-index:3;top:18px;font-size:10px;letter-spacing:.32em;text-transform:uppercase;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.55);color:#121212;backdrop-filter:blur(6px)}
-.tag.l{left:18px;background:rgba(0,0,0,.25);color:#fff} .tag.r{right:18px} .tag b{font-weight:inherit}
-.handle{position:absolute;top:0;bottom:0;left:var(--cut,50%);width:0;pointer-events:none;z-index:3}
-.handle::before{content:"";position:absolute;top:0;bottom:0;left:-1px;width:2px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
-.handle span{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;background:#121212;color:#fff;display:flex;align-items:center;justify-content:center;font:500 18px "JetBrains Mono",monospace;box-shadow:0 8px 24px rgba(0,0,0,.3);letter-spacing:-.05em}
-.range{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize;z-index:4;-webkit-appearance:none;appearance:none;background:transparent}
-.range::-webkit-slider-thumb{-webkit-appearance:none;width:64px;height:100%} .range::-moz-range-thumb{width:64px;height:100%;border:0;background:transparent}
-.hint{margin-top:14px;font-size:11px;letter-spacing:.3em;text-transform:uppercase;opacity:.45;text-align:center}
-
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
-.tile{display:flex;align-items:flex-end;aspect-ratio:16/10;border-radius:14px;padding:14px;text-decoration:none;font-size:12px;color:inherit;overflow:hidden;transition:transform .2s} .tile:hover{transform:translateY(-2px)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.tile{display:flex;align-items:flex-end;aspect-ratio:16/10;border-radius:18px;padding:18px;text-decoration:none;font-size:14px;color:inherit;overflow:hidden;transition:transform .2s} .tile:hover{transform:translateY(-2px)}
 
 .sk-dawn {
   --skin-base: #f6f5f1;
@@ -304,39 +265,40 @@ h2{font-size:clamp(36px,4.5vw,56px);letter-spacing:-.02em;line-height:1;margin:0
 }
 
 .sk-ink{color:#f2f0ea}
-.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:32px} .step h3{font-size:28px;margin:0 0 8px;letter-spacing:-.02em} .step p{opacity:.62;line-height:1.55;margin:0 0 10px}
-pre{background:#121212;color:#f2f0ea;border-radius:12px;padding:18px 20px;font-size:13px;line-height:1.6;overflow-x:auto;margin:0}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px} .step h3{font-size:28px;margin:0 0 8px;letter-spacing:-.02em} .step p{opacity:.62;line-height:1.55;margin:0 0 12px}
+pre{background:#121212;color:#f2f0ea;border-radius:12px;padding:18px 20px;font-size:13px;line-height:1.9;overflow-x:auto;margin:0;white-space:pre}
 footer{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5} footer a{color:inherit}
 @media (max-width:760px){
   h1{font-size:clamp(48px,14vw,96px)} .wrap{padding:100px 6vw 80px}
-  .cmd{font-size:12px;padding:11px 14px;gap:10px}
-  section.plain{padding:72px 6vw} .tile{aspect-ratio:16/9} .steps{gap:36px}
-  .compare{aspect-ratio:4/5;border-radius:14px} .tag{font-size:9px;letter-spacing:.22em;padding:5px 9px;top:12px} .tag.l{left:12px} .tag.r{right:12px} .tag b{display:none}
-  pre{white-space:pre-wrap;word-break:break-all;font-size:12px;padding:14px 16px}
+  .cmd{font-size:12px;padding:0 14px;gap:10px}
+  section.plain{padding:72px 6vw}
+  .grid{grid-template-columns:1fr;gap:16px} .tile{aspect-ratio:16/10;border-radius:14px}
+  .steps{gap:36px} pre{font-size:12px;padding:16px 16px;line-height:2}
+  .tag{top:14px;font-size:9px;letter-spacing:.22em;padding:5px 9px} .tag.l{left:14px} .tag.r{right:14px} .tag b{display:none} .wordmark{top:48px;font-size:22px}
 }
 </style></head>
 <body>
-<section class="skin"><div class="skin-blobs" aria-hidden="true"><div class="skin-blob" style="left:-16.2%;top:-24.3%;width:61.5%;height:85.5%;background:radial-gradient(closest-side, rgba(182,240,220,0.95) 0%, rgba(182,240,220,0.52) 45%, rgba(182,240,220,0.00) 100%);--d:32s;--delay:-4s;--x1:3.4%;--y1:6.3%;--x2:-5.6%;--y2:7.7%;--x3:-7.7%;--y3:-7.6%"></div><div class="skin-blob" style="left:8.3%;top:-8.1%;width:51.9%;height:97.4%;background:radial-gradient(closest-side, rgba(207,225,255,0.85) 0%, rgba(207,225,255,0.47) 45%, rgba(207,225,255,0.00) 100%);--d:27s;--delay:-20s;--x1:2.8%;--y1:-2.6%;--x2:7.6%;--y2:-7.6%;--x3:2.9%;--y3:3.1%"></div><div class="skin-blob" style="left:-17.1%;top:22.4%;width:75.9%;height:75.5%;background:radial-gradient(closest-side, rgba(215,205,247,0.85) 0%, rgba(215,205,247,0.47) 45%, rgba(215,205,247,0.00) 100%);--d:31s;--delay:-8s;--x1:-6.7%;--y1:7.6%;--x2:4.4%;--y2:4.3%;--x3:-5.2%;--y3:3.1%"></div><div class="skin-blob" style="left:-5.0%;top:57.6%;width:72.5%;height:54.4%;background:radial-gradient(closest-side, rgba(243,196,230,0.90) 0%, rgba(243,196,230,0.50) 45%, rgba(243,196,230,0.00) 100%);--d:39s;--delay:-28s;--x1:-7.0%;--y1:-3.7%;--x2:7.3%;--y2:1.7%;--x3:3.0%;--y3:-5.7%"></div><div class="skin-blob" style="left:50.8%;top:-28.4%;width:67.3%;height:95.6%;background:radial-gradient(closest-side, rgba(242,219,149,0.90) 0%, rgba(242,219,149,0.50) 45%, rgba(242,219,149,0.00) 100%);--d:30s;--delay:-18s;--x1:8.2%;--y1:-3.0%;--x2:0.1%;--y2:2.0%;--x3:0.6%;--y3:-1.7%"></div><div class="skin-blob" style="left:33.7%;top:-14.2%;width:65.5%;height:85.3%;background:radial-gradient(closest-side, rgba(249,239,198,0.80) 0%, rgba(249,239,198,0.44) 45%, rgba(249,239,198,0.00) 100%);--d:43s;--delay:-14s;--x1:6.2%;--y1:-6.7%;--x2:5.9%;--y2:-7.1%;--x3:-4.4%;--y3:-1.0%"></div><div class="skin-blob" style="left:49.7%;top:8.7%;width:67.5%;height:90.7%;background:radial-gradient(closest-side, rgba(248,214,192,0.85) 0%, rgba(248,214,192,0.47) 45%, rgba(248,214,192,0.00) 100%);--d:37s;--delay:-1s;--x1:-3.1%;--y1:-1.5%;--x2:7.9%;--y2:-1.6%;--x3:-1.3%;--y3:0.1%"></div><div class="skin-blob" style="left:34.5%;top:53.6%;width:76.9%;height:74.6%;background:radial-gradient(closest-side, rgba(248,226,220,0.90) 0%, rgba(248,226,220,0.50) 45%, rgba(248,226,220,0.00) 100%);--d:33s;--delay:-4s;--x1:6.0%;--y1:3.0%;--x2:7.9%;--y2:8.7%;--x3:-2.3%;--y3:-7.3%"></div><div class="skin-leak" style="left:25.7%;top:-22.2%;width:51.7%;height:114.0%;background:radial-gradient(closest-side, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.52) 45%, rgba(255,255,255,0.00) 100%);--d:40s;--delay:-4s;--x1:2.7%;--y1:-6.7%;--x2:5.0%;--y2:5.7%;--x3:-6.5%;--y3:2.6%"></div></div><div class="wrap">
-  <div class="wordmark serif">gradient.skin</div>
-  <div class="eyebrow mono">Claude Code skill</div>
-  <h1 class="serif">Gradients that<br><em>feel like light.</em></h1>
-  <p class="sub">Soft mesh backgrounds, a dot grid, editorial type. One prompt. Any palette. HTML, CSS, SVG or PNG.</p>
-  <button class="cmd mono" onclick="navigator.clipboard.writeText(this.dataset.c);this.querySelector('small').textContent='copied'" data-c="git clone https://github.com/rahulsingh2312/gradient-skills && cp -r gradient-skills/gradient-skin ~/.claude/skills/gradient-skin"><span>git clone rahulsingh2312/gradient-skills</span><small>copy install</small></button>
-  <div class="links"><a href="https://github.com/rahulsingh2312/gradient-skills">GitHub →</a><a href="#compare">Before / after →</a><a href="#palettes">Palettes →</a></div>
-  <div class="foot mono">Open source · MIT · gradient.skin</div>
-</div></section>
-
-<section class="plain" id="compare">
-  <h2 class="serif">The one you copied, <em>and the one you wanted.</em></h2>
-  <p class="lede">Left: the gradient every template ships with. Right: the same page after one prompt. Drag the handle.</p>
-  <div class="compare" id="cmp" style="--cut:55%">
-    <div class="layer before"><h3>Ship faster.</h3><p>The all-in-one platform for modern teams to build, deploy and scale.</p><span class="btn">Get started</span></div>
-    <div class="layer after"><div class="after-skin"><div class="after-blobs" aria-hidden="true"><div class="after-blob" style="left:-16.2%;top:-24.3%;width:61.5%;height:85.5%;background:radial-gradient(closest-side, rgba(182,240,220,1.00) 0%, rgba(182,240,220,0.55) 45%, rgba(182,240,220,0.00) 100%);--d:32s;--delay:-4s;--x1:3.4%;--y1:6.3%;--x2:-5.6%;--y2:7.7%;--x3:-7.7%;--y3:-7.6%"></div><div class="after-blob" style="left:8.3%;top:-8.1%;width:51.9%;height:97.4%;background:radial-gradient(closest-side, rgba(207,225,255,0.98) 0%, rgba(207,225,255,0.54) 45%, rgba(207,225,255,0.00) 100%);--d:27s;--delay:-20s;--x1:2.8%;--y1:-2.6%;--x2:7.6%;--y2:-7.6%;--x3:2.9%;--y3:3.1%"></div><div class="after-blob" style="left:-17.1%;top:22.4%;width:75.9%;height:75.5%;background:radial-gradient(closest-side, rgba(215,205,247,0.98) 0%, rgba(215,205,247,0.54) 45%, rgba(215,205,247,0.00) 100%);--d:31s;--delay:-8s;--x1:-6.7%;--y1:7.6%;--x2:4.4%;--y2:4.3%;--x3:-5.2%;--y3:3.1%"></div><div class="after-blob" style="left:-5.0%;top:57.6%;width:72.5%;height:54.4%;background:radial-gradient(closest-side, rgba(243,196,230,1.00) 0%, rgba(243,196,230,0.55) 45%, rgba(243,196,230,0.00) 100%);--d:39s;--delay:-28s;--x1:-7.0%;--y1:-3.7%;--x2:7.3%;--y2:1.7%;--x3:3.0%;--y3:-5.7%"></div><div class="after-blob" style="left:50.8%;top:-28.4%;width:67.3%;height:95.6%;background:radial-gradient(closest-side, rgba(242,219,149,1.00) 0%, rgba(242,219,149,0.55) 45%, rgba(242,219,149,0.00) 100%);--d:30s;--delay:-18s;--x1:8.2%;--y1:-3.0%;--x2:0.1%;--y2:2.0%;--x3:0.6%;--y3:-1.7%"></div><div class="after-blob" style="left:33.7%;top:-14.2%;width:65.5%;height:85.3%;background:radial-gradient(closest-side, rgba(249,239,198,0.92) 0%, rgba(249,239,198,0.51) 45%, rgba(249,239,198,0.00) 100%);--d:43s;--delay:-14s;--x1:6.2%;--y1:-6.7%;--x2:5.9%;--y2:-7.1%;--x3:-4.4%;--y3:-1.0%"></div><div class="after-blob" style="left:49.7%;top:8.7%;width:67.5%;height:90.7%;background:radial-gradient(closest-side, rgba(248,214,192,0.98) 0%, rgba(248,214,192,0.54) 45%, rgba(248,214,192,0.00) 100%);--d:37s;--delay:-1s;--x1:-3.1%;--y1:-1.5%;--x2:7.9%;--y2:-1.6%;--x3:-1.3%;--y3:0.1%"></div><div class="after-blob" style="left:34.5%;top:53.6%;width:76.9%;height:74.6%;background:radial-gradient(closest-side, rgba(248,226,220,1.00) 0%, rgba(248,226,220,0.55) 45%, rgba(248,226,220,0.00) 100%);--d:33s;--delay:-4s;--x1:6.0%;--y1:3.0%;--x2:7.9%;--y2:8.7%;--x3:-2.3%;--y3:-7.3%"></div><div class="after-leak" style="left:25.7%;top:-22.2%;width:51.7%;height:114.0%;background:radial-gradient(closest-side, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.52) 45%, rgba(255,255,255,0.00) 100%);--d:40s;--delay:-4s;--x1:2.7%;--y1:-6.7%;--x2:5.0%;--y2:5.7%;--x3:-6.5%;--y3:2.6%"></div></div><div class="after-content"><h3 class="serif">Ship the<br><em>quiet part.</em></h3><p>Infra that stays out of your way. Built for teams who read the docs.</p><span class="cta">Get started →</span></div></div></div>
-    <span class="tag mono l">Before</span><span class="tag mono r">After<b> · one prompt</b></span>
-    <div class="handle"><span>&lt;&gt;</span></div>
-    <input class="range" type="range" min="2" max="98" value="55" aria-label="Compare before and after">
-  </div>
-  <div class="hint mono">drag · or just watch it breathe</div>
+<section class="hero" id="hero" style="--cut:92%">
+  <div class="layer ugly"><div class="wrap">
+    <div class="wordmark">gradient.skin</div>
+    <div class="eyebrow mono">Claude Code skill</div>
+    <h1>Gradients that<br><em>feel like light.</em></h1>
+    <p class="sub">Soft mesh backgrounds, a dot grid, editorial type. One prompt. Any palette. HTML, CSS, SVG or PNG.</p>
+    <button class="cmd mono" data-copy><span>git clone rahulsingh2312/gradient-skills</span><small>copy install</small></button>
+    <div class="links"><a href="https://github.com/rahulsingh2312/gradient-skills">GitHub →</a><a href="#palettes">Palettes →</a></div>
+    <div class="foot mono">Open source · MIT · gradient.skin</div>
+  </div></div>
+  <div class="layer good"><section class="skin"><div class="skin-blobs" aria-hidden="true"><div class="skin-blob" style="left:-16.2%;top:-24.3%;width:61.5%;height:85.5%;background:radial-gradient(closest-side, rgba(182,240,220,0.95) 0%, rgba(182,240,220,0.52) 45%, rgba(182,240,220,0.00) 100%);--d:32s;--delay:-4s;--x1:3.4%;--y1:6.3%;--x2:-5.6%;--y2:7.7%;--x3:-7.7%;--y3:-7.6%"></div><div class="skin-blob" style="left:8.3%;top:-8.1%;width:51.9%;height:97.4%;background:radial-gradient(closest-side, rgba(207,225,255,0.85) 0%, rgba(207,225,255,0.47) 45%, rgba(207,225,255,0.00) 100%);--d:27s;--delay:-20s;--x1:2.8%;--y1:-2.6%;--x2:7.6%;--y2:-7.6%;--x3:2.9%;--y3:3.1%"></div><div class="skin-blob" style="left:-17.1%;top:22.4%;width:75.9%;height:75.5%;background:radial-gradient(closest-side, rgba(215,205,247,0.85) 0%, rgba(215,205,247,0.47) 45%, rgba(215,205,247,0.00) 100%);--d:31s;--delay:-8s;--x1:-6.7%;--y1:7.6%;--x2:4.4%;--y2:4.3%;--x3:-5.2%;--y3:3.1%"></div><div class="skin-blob" style="left:-5.0%;top:57.6%;width:72.5%;height:54.4%;background:radial-gradient(closest-side, rgba(243,196,230,0.90) 0%, rgba(243,196,230,0.50) 45%, rgba(243,196,230,0.00) 100%);--d:39s;--delay:-28s;--x1:-7.0%;--y1:-3.7%;--x2:7.3%;--y2:1.7%;--x3:3.0%;--y3:-5.7%"></div><div class="skin-blob" style="left:50.8%;top:-28.4%;width:67.3%;height:95.6%;background:radial-gradient(closest-side, rgba(242,219,149,0.90) 0%, rgba(242,219,149,0.50) 45%, rgba(242,219,149,0.00) 100%);--d:30s;--delay:-18s;--x1:8.2%;--y1:-3.0%;--x2:0.1%;--y2:2.0%;--x3:0.6%;--y3:-1.7%"></div><div class="skin-blob" style="left:33.7%;top:-14.2%;width:65.5%;height:85.3%;background:radial-gradient(closest-side, rgba(249,239,198,0.80) 0%, rgba(249,239,198,0.44) 45%, rgba(249,239,198,0.00) 100%);--d:43s;--delay:-14s;--x1:6.2%;--y1:-6.7%;--x2:5.9%;--y2:-7.1%;--x3:-4.4%;--y3:-1.0%"></div><div class="skin-blob" style="left:49.7%;top:8.7%;width:67.5%;height:90.7%;background:radial-gradient(closest-side, rgba(248,214,192,0.85) 0%, rgba(248,214,192,0.47) 45%, rgba(248,214,192,0.00) 100%);--d:37s;--delay:-1s;--x1:-3.1%;--y1:-1.5%;--x2:7.9%;--y2:-1.6%;--x3:-1.3%;--y3:0.1%"></div><div class="skin-blob" style="left:34.5%;top:53.6%;width:76.9%;height:74.6%;background:radial-gradient(closest-side, rgba(248,226,220,0.90) 0%, rgba(248,226,220,0.50) 45%, rgba(248,226,220,0.00) 100%);--d:33s;--delay:-4s;--x1:6.0%;--y1:3.0%;--x2:7.9%;--y2:8.7%;--x3:-2.3%;--y3:-7.3%"></div><div class="skin-leak" style="left:25.7%;top:-22.2%;width:51.7%;height:114.0%;background:radial-gradient(closest-side, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.52) 45%, rgba(255,255,255,0.00) 100%);--d:40s;--delay:-4s;--x1:2.7%;--y1:-6.7%;--x2:5.0%;--y2:5.7%;--x3:-6.5%;--y3:2.6%"></div></div><div class="wrap">
+    <div class="wordmark serif">gradient.skin</div>
+    <div class="eyebrow mono">Claude Code skill</div>
+    <h1 class="serif">Gradients that<br><em>feel like light.</em></h1>
+    <p class="sub">Soft mesh backgrounds, a dot grid, editorial type. One prompt. Any palette. HTML, CSS, SVG or PNG.</p>
+    <button class="cmd mono" data-copy><span>git clone rahulsingh2312/gradient-skills</span><small>copy install</small></button>
+    <div class="links"><a href="https://github.com/rahulsingh2312/gradient-skills">GitHub →</a><a href="#palettes">Palettes →</a></div>
+    <div class="foot mono">Open source · MIT · gradient.skin</div>
+  </div></section></div>
+  <span class="tag mono l">Before</span><span class="tag mono r">After<b> · one prompt</b></span>
+  <div class="grip" role="slider" tabindex="0" aria-label="Compare the template gradient with gradient.skin" aria-valuemin="0" aria-valuemax="100" aria-valuenow="92"><i>&lt;&gt;</i><b>drag me</b></div>
 </section>
 
 <section class="plain" id="palettes">
@@ -351,24 +313,35 @@ footer{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5} footer
   <div class="steps">
     <div class="step"><h3 class="serif">1. Install</h3><p>Drop the skill in your Claude Code skills folder.</p><pre>git clone https://github.com/rahulsingh2312/gradient-skills
 cp -r gradient-skills/gradient-skin ~/.claude/skills/gradient-skin</pre></div>
-    <div class="step"><h3 class="serif">2. Ask</h3><p>Describe the hero. Mention a palette, a brand colour, or nothing.</p><pre>/gradient-skin launch hero for Acme,
-brand #5B4BFF, animated, export OG + X images</pre></div>
-    <div class="step"><h3 class="serif">3. Ship</h3><p>Get a responsive page, a CSS block for your codebase, an SVG, or PNGs.</p><pre>hero.html  skin.css
-og.png     hero-x.png</pre></div>
+    <div class="step"><h3 class="serif">2. Ask</h3><p>Describe the hero. Mention a palette, a brand colour, or nothing.</p><pre>/gradient-skin launch hero for Acme, brand #5B4BFF, animated, export OG + X images</pre></div>
+    <div class="step"><h3 class="serif">3. Ship</h3><p>Get a responsive page, a CSS block for your codebase, an SVG, or PNGs.</p><pre>hero.html
+skin.css
+og.png
+hero-x.png</pre></div>
   </div>
 </section>
 <footer class="mono">GRADIENT.SKIN · A CLAUDE CODE SKILL · <a href="https://github.com/rahulsingh2312/gradient-skills">github.com/rahulsingh2312/gradient-skills</a></footer>
 <script>
 (function(){
-  var box=document.getElementById('cmp'), r=box.querySelector('.range'), touched=false;
-  function set(v){ box.style.setProperty('--cut', v+'%'); }
-  r.addEventListener('input', function(){ touched=true; set(r.value); });
-  r.addEventListener('pointerdown', function(){ touched=true; });
-  // gentle sweep until the user grabs it, so the page shows what it does at rest
-  if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
-    var t0=performance.now();
-    (function tick(now){ if(touched) return; var p=(now-t0)/9000; var v=55+22*Math.sin(p*Math.PI*2); r.value=v; set(v); requestAnimationFrame(tick); })(t0);
+  var hero=document.getElementById('hero'), grip=hero.querySelector('.grip'), cut=92, touched=false, raf;
+  function set(v){ cut=Math.max(0,Math.min(100,v)); hero.style.setProperty('--cut',cut+'%'); grip.setAttribute('aria-valuenow',Math.round(cut)); hero.dataset.cut=cut<=0.5?'0':cut>=99.5?'100':''; }
+  // 1.2 s pause, then the good skin sweeps across and becomes the whole background
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){ set(0); hero.classList.add('settled'); }
+  else {
+    var t0=null, from=92, dur=2600, delay=1200;
+    (function tick(now){ if(touched) return; if(t0===null) t0=now; var t=(now-t0-delay)/dur; if(t<0){raf=requestAnimationFrame(tick);return;}
+      var e=t>=1?1:1-Math.pow(1-t,3); set(from*(1-e)); if(t<1) raf=requestAnimationFrame(tick); else hero.classList.add('settled'); })(performance.now());
   }
+  // drag the grip
+  var dragging=false;
+  function pos(e){ var r=hero.getBoundingClientRect(); return (e.clientX-r.left)/r.width*100; }
+  grip.addEventListener('pointerdown',function(e){ touched=true; cancelAnimationFrame(raf); hero.classList.add('settled'); dragging=true; grip.setPointerCapture(e.pointerId); set(pos(e)); e.preventDefault(); });
+  grip.addEventListener('pointermove',function(e){ if(dragging) set(pos(e)); });
+  grip.addEventListener('pointerup',function(){ dragging=false; }); grip.addEventListener('pointercancel',function(){ dragging=false; });
+  grip.addEventListener('keydown',function(e){ var d=e.key==='ArrowLeft'?-4:e.key==='ArrowRight'?4:0; if(d){ touched=true; cancelAnimationFrame(raf); set(cut+d); e.preventDefault(); } });
+  // copy buttons (both layers)
+  document.querySelectorAll('[data-copy]').forEach(function(b){ b.addEventListener('click',function(){ navigator.clipboard.writeText('git clone https://github.com/rahulsingh2312/gradient-skills && cp -r gradient-skills/gradient-skin ~/.claude/skills/gradient-skin'); document.querySelectorAll('[data-copy] small').forEach(function(s){s.textContent='copied';}); }); });
 })();
 </script>
 </body></html>
