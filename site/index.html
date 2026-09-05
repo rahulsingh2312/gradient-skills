@@ -82,10 +82,14 @@ h1{font-size:clamp(56px,7.6vw,128px);line-height:.92;letter-spacing:-.025em;marg
 .grip{position:absolute;z-index:5;top:0;bottom:0;left:var(--cut,92%);width:0;cursor:ew-resize;touch-action:pan-y;outline:none}
 .grip::before{content:"";position:absolute;top:0;bottom:0;left:-1px;width:2px;background:#1c1c21}
 .grip::after{content:"";position:absolute;top:0;bottom:0;left:-32px;width:64px}
-.grip i{position:absolute;top:50%;left:0;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:50%;background:#1c1c21;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(255,255,255,.85),0 6px 18px rgba(0,0,0,.28);font-style:normal;transition:transform .2s}
-.grip i svg{width:18px;height:18px;display:block}
+.grip i{position:absolute;top:50%;left:0;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:50%;background:#1c1c21;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.28);font-style:normal;transition:transform .2s}
+.grip i svg{width:18px;height:18px;display:block;transition:transform .2s}
 .grip:hover i,.grip:focus-visible i{transform:translate(-50%,-50%) scale(1.08)}
-.hero[data-cut="0"] .grip i{transform:translate(0,-50%)} .hero[data-cut="100"] .grip i{transform:translate(-100%,-50%)}
+.grip:focus-visible i{box-shadow:0 0 0 2px #fff,0 6px 18px rgba(0,0,0,.28)}
+/* parked at an edge: half the circle is off-screen, so it reads as a tab with one chevron */
+.hero[data-cut="0"] .grip::before,.hero[data-cut="100"] .grip::before{opacity:0}
+.hero[data-cut="0"] .grip i svg{transform:translateX(9px)} .hero[data-cut="0"] .grip i svg .l{display:none}
+.hero[data-cut="100"] .grip i svg{transform:translateX(-9px)} .hero[data-cut="100"] .grip i svg .r{display:none}
 @media (prefers-reduced-motion:reduce){.grip i{transition:none}}
 
 section.plain{max-width:1100px;margin:0 auto;padding:96px 6vw}
@@ -302,7 +306,7 @@ footer{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5} footer
     <div class="foot mono">Open source · MIT · gradient.skin</div>
   </div></section></div>
   <span class="tag mono l">Before</span><span class="tag mono r">After<b> · one prompt</b></span>
-  <div class="grip" role="slider" tabindex="0" aria-label="Compare the template gradient with gradient.skin" aria-valuemin="0" aria-valuemax="100" aria-valuenow="92"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg></i></div>
+  <div class="grip" role="slider" tabindex="0" aria-label="Compare the template gradient with gradient.skin" aria-valuemin="0" aria-valuemax="100" aria-valuenow="92"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path class="l" d="M9 7l-5 5 5 5"/><path class="r" d="M15 7l5 5-5 5"/></svg></i></div>
 </section>
 
 <section class="plain" id="palettes">
