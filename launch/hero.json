@@ -1,10 +1,10 @@
 {
-  "wordmark": "Haze.",
+  "wordmark": "gradient.skin",
   "palette": "dawn", "layout": "split", "seed": 3,
   "footer": "A Claude Code skill · github.com/rahulsingh2312/gradient-skills",
   "panels": [
     {"eyebrow": "Claude Code skill", "headline": "Gradients that", "italic": "feel like light.",
      "sub": "Soft mesh backgrounds, a dot grid, editorial type. One prompt. Any palette. HTML, CSS, SVG or PNG.",
-     "badge": "Open source", "cta": "/haze"}
+     "badge": "Open source", "cta": "/gradient-skin"}
   ]
 }

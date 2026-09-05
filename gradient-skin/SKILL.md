@@ -1,16 +1,16 @@
 ---
-name: haze
+name: gradient-skin
 description: Generate soft pastel "mesh" gradient backgrounds and editorial hero sections in the "editorial fintech launch page" style — blurred colour blobs (mint, lavender, pink fading into cream and gold), a white light-leak, a faint dot grid, optional film grain, and big serif display type with an italic second line. Use this whenever someone asks for a gradient background, a mesh/aurora/blurred/pastel/dreamy/holographic gradient, a "soft" or "glowy" hero, a landing page hero, an OG image, an X/Twitter or social card, a wallpaper, or says they want something that looks like Linear, Vercel, Arc, or Raycast launch pages. Also use it when they only want the CSS for such a background, or a quick PNG. Outputs HTML, CSS, SVG, or PNG.
 ---
 
-# Haze — pastel mesh gradients that look like light on paper
+# gradient.skin — pastel mesh gradients that look like light on paper
 
 The look this skill produces: a near-white sheet of paper with big, very soft pools of colour bleeding in
 from the edges — cool ones (mint, sky, lavender, pink) on one side, warm ones (cream, gold, peach) on the
 other — a bright white "light-leak" between them, a barely-there dot grid, and calm editorial type.
 Think Linear's launch art, or a Dribbble "aurora" shot, minus the neon.
 
-Everything is in `scripts/haze.py` (stdlib Python, no packages). Read this file, then run the script.
+Everything is in `scripts/skin.py` (stdlib Python, no packages). Read this file, then run the script.
 Only open the references when you need them:
 
 - `references/recipe.md` — the CSS anatomy explained, for hand-writing it into React/Tailwind/Svelte/plain CSS
@@ -21,7 +21,7 @@ Only open the references when you need them:
 ## Quick start
 
 ```bash
-S=<path-to-this-skill>/scripts/haze.py
+S=<path-to-this-skill>/scripts/skin.py
 
 # 1. A finished hero as a standalone HTML page (Google Fonts, responsive)
 python3 $S --responsive --wordmark "Acme." --eyebrow "Beta" \
@@ -29,7 +29,7 @@ python3 $S --responsive --wordmark "Acme." --eyebrow "Beta" \
   --sub "Infra that stays out of your way." --badge "Live" --cta "Get started" --out hero.html
 
 # 2. Just the background CSS to paste into an existing site
-python3 $S --blank --palette dusk --format css > haze.css
+python3 $S --blank --palette dusk --format css > skin.css
 
 # 3. A PNG for X / OG / a wallpaper (needs Node + Playwright, see "Rendering PNGs")
 python3 $S --palette sorbet --seed 4 --size 1200x630 --headline "Launch" --italic "day." --out og.png
@@ -52,6 +52,7 @@ python3 $S --spec spec.json --size 2000x1300 --out site.png
 | `--grain 0.06` | film grain overlay | 0.04–0.1; off by default |
 | `--no-grid` / `--grid-size` | the dot grid | 22px default; 28–32px on very large canvases |
 | `--fonts` | `google` (html default), `local` (png default, vendored), `embed` (self-contained), `system` | |
+| `--animate` | blobs drift slowly, like light moving on water | pages and hero sections; off for OG/PNG (a still frame is a still frame) |
 | `--responsive` | HTML fills the viewport instead of fixed `--size` | use for real pages |
 | `--scale 2` | PNG device pixel ratio | 2 for retina, 1 for quick previews |
 
@@ -127,6 +128,8 @@ OFL) so they are identical offline and in CI. HTML output links Google Fonts by 
 - "More colour / punchier" → `--intensity 1.25`, or `--layout corners`.
 - "Match our brand (#5B4BFF)" → palettes.md → "From a brand colour"; pass `--colors`.
 - "Dark version" → `--palette ink` (dot grid flips to white automatically).
-- "Animate it" → recipe.md has a 20-line keyframe drift that moves the blobs slowly; keep it under
-  60 s per cycle and respect `prefers-reduced-motion`.
-- "Put it behind my existing page" → recipe.md, the `.haze` class is designed to wrap any content.
+- "Animate it / make it move / flowing" → `--animate`. Each blob becomes its own element with a 22–44 s
+  ease-in-out drift, so the whole thing breathes rather than scrolls. It already respects
+  `prefers-reduced-motion`. For an existing codebase, `--animate --format css` prints the CSS and the
+  blob markup to paste in; recipe.md §6 explains the structure.
+- "Put it behind my existing page" → recipe.md, the `.skin` class is designed to wrap any content.

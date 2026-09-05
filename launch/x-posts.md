@@ -1,4 +1,4 @@
-# Haze — X launch copy
+# gradient.skin — X launch copy
 
 Everything below is ready to paste. Pick one main post, attach the image named next to it, and post the
 thread as replies to yourself. Swap `<link>` for the GitHub URL (or the domain once you have one).
@@ -16,11 +16,11 @@ the image does the selling. Lowercase is fine on X; the serif in the image carri
 >
 > so i turned it into a Claude Code skill. one prompt → hero page, css, svg, or png
 >
-> it's called haze. open source. <link>
+> it's called gradient.skin. open source. <link>
 
 **B — the demo** · image: `images/one-prompt.png`
 
-> `/haze launch hero for acme, brand #5B4BFF, a bit punchier, export OG + X images`
+> `/gradient-skin launch hero for acme, brand #5B4BFF, a bit punchier, export OG + X images`
 >
 > that's the whole workflow now. Claude Code skill, free, link below
 
@@ -29,7 +29,7 @@ the image does the selling. Lowercase is fine on X; the serif in the image carri
 > every "beautiful" landing page in 2026 is the same 4 things:
 > pastel mesh gradient, dot grid, one serif headline, an italic second line
 >
-> so i made it a one-liner. /haze. steal it. <link>
+> so i made it a one-liner. /gradient-skin. steal it. <link>
 
 **D — the short one** · image: `images/hero-x.png`
 
@@ -56,9 +56,9 @@ the image does the selling. Lowercase is fine on X; the serif in the image carri
 
 > install:
 > ```
-> git clone <repo> && cp -r gradient-skills/haze ~/.claude/skills/haze
+> git clone <repo> && cp -r gradient-skills/gradient-skin ~/.claude/skills/gradient-skin
 > ```
-> then in Claude Code: `/haze make me a hero for <your product>`
+> then in Claude Code: `/gradient-skin make me a hero for <your product>`
 > png export needs playwright (`npm i -g playwright && npx playwright install chromium`), html/css/svg need nothing
 
 **5/**
@@ -80,9 +80,9 @@ the image does the selling. Lowercase is fine on X; the serif in the image carri
 
 - "designers spend 40 minutes on this gradient. it's now 4 seconds and a slash command"
 - "the gradient from every YC landing page, as a Claude Code skill"
-- "you know the one. mint on the left, gold on the right, dot grid, serif. now it's `/haze`"
+- "you know the one. mint on the left, gold on the right, dot grid, serif. now it's `/gradient-skin`"
 - "i reverse-engineered the pastel mesh gradient look and put it in a skill so i never have to do it again"
-- "stop screenshotting linear's hero for reference. run /haze"
+- "stop screenshotting linear's hero for reference. run /gradient-skin"
 
 ## Reply-guy answers (have these ready)
 
@@ -93,7 +93,7 @@ the image does the selling. Lowercase is fine on X; the serif in the image carri
 
 ## Quote-tweet later (when someone posts a result)
 
-> this is what haze looks like in someone else's hands. 10/10 palette choice <quote>
+> this is what gradient.skin looks like in someone else's hands. 10/10 palette choice <quote>
 
 ## Timing
 

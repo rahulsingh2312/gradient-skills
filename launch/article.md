@@ -1,7 +1,7 @@
 # X Article: paste-ready
 
 **Cover image:** `images/article-thumb-before-after.png` (highest click-through) or `images/article-thumb-hook.png` (cleaner as a cover).
-**Working name in this draft:** Smudge. Find-and-replace it if you pick something else.
+**Working name in this draft:** gradient.skin. Find-and-replace it if you pick something else.
 
 ---
 
@@ -66,19 +66,19 @@ Install is two lines:
 
 ```
 git clone https://github.com/rahulsingh2312/gradient-skills
-cp -r gradient-skills/smudge ~/.claude/skills/smudge
+cp -r gradient-skills/gradient-skin ~/.claude/skills/gradient-skin
 ```
 
 Then in Claude Code:
 
 ```
-/smudge launch hero for Acme, brand #5B4BFF, a bit punchier, export OG + X images
+/gradient-skin launch hero for Acme, brand #5B4BFF, a bit punchier, export OG + X images
 ```
 
 You get a hero page, the CSS, and two PNGs, all from the same words. If you want to skip Claude entirely, the script runs on its own:
 
 ```
-python3 smudge/scripts/smudge.py --palette sorbet --seed 4 --headline "Launch" --italic "day." --out og.png
+python3 gradient-skin/scripts/gradient-skin.py --palette sorbet --seed 4 --headline "Launch" --italic "day." --out og.png
 ```
 
 *[image: images/article-thumb-before-after.png]*

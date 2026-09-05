@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """
-haze.py — generate soft pastel "mesh" gradient backgrounds and editorial hero
+skin.py — generate soft pastel "mesh" gradient backgrounds and editorial hero
 sections (the soft "light on paper" look): blurred colour blobs, a white light-leak, a faint
 dot grid, optional film grain, and serif display type.
 
 Pure standard library. PNG export shells out to render.mjs (Playwright/Chromium).
 
 Quick examples
-  python3 haze.py --out hero.html
-  python3 haze.py --palette sorbet --seed 7 --size 1600x900 --format png --out hero.png
-  python3 haze.py --blank --palette glacier --format css            # just the CSS
-  python3 haze.py --spec spec.json --format png --out og.png        # full control
+  python3 skin.py --out hero.html
+  python3 skin.py --palette sorbet --seed 7 --size 1600x900 --format png --out hero.png
+  python3 skin.py --blank --palette glacier --format css            # just the CSS
+  python3 skin.py --spec spec.json --format png --out og.png        # full control
 
 Run with --help for every flag, or read ../SKILL.md for the design rules.
 """
@@ -180,15 +180,59 @@ GRAIN_SVG = ("data:image/svg+xml;utf8,"
              "<feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .6 0'/></filter>"
              "<rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")
 
+
+# --------------------------------------------------------------------------- animation
+ANIM_CSS = """
+.skin-blobs { position:absolute; inset:-12%; pointer-events:none; z-index:0; overflow:hidden; }
+.skin-blob  { position:absolute; border-radius:50%; will-change:transform;
+              animation: skin-drift var(--d,30s) ease-in-out var(--delay,0s) infinite alternate; }
+.skin-leak  { position:absolute; border-radius:50%; will-change:transform;
+              animation: skin-drift 40s ease-in-out -7s infinite alternate; }
+@keyframes skin-drift {
+  0%   { transform: translate(0,0) scale(1) rotate(0deg); }
+  33%  { transform: translate(var(--x1), var(--y1)) scale(1.07) rotate(3deg); }
+  66%  { transform: translate(var(--x2), var(--y2)) scale(.95) rotate(-2deg); }
+  100% { transform: translate(var(--x3), var(--y3)) scale(1.04) rotate(1deg); }
+}
+@media (prefers-reduced-motion: reduce) { .skin-blob, .skin-leak { animation:none; } }
+.skin::before { z-index:1; } .skin::after { z-index:1; } .skin-content { z-index:2; }
+"""
+
+def blob_div(b, rng, cls="skin-blob", dur=None):
+    """One absolutely-positioned blob. Position/size are % of the (oversized) blob layer, so they line up
+    with the static radial-gradient version closely enough that swapping animate on/off is seamless."""
+    # the layer is inset -12%, so map 0..100 -> 12..88 of the layer
+    m = lambda v: 12 + v * .76
+    left, top = m(b["x"] - b["rx"]), m(b["y"] - b["ry"])
+    w, h = b["rx"] * 2 * .76, b["ry"] * 2 * .76
+    drift = lambda: f"{rng.uniform(-9, 9):.1f}%"
+    d = dur or rng.uniform(22, 44)
+    bg = (f"radial-gradient(closest-side, {rgba(b['color'], b['alpha'])} 0%, "
+          f"{rgba(b['color'], b['alpha'] * .55)} 45%, {rgba(b['color'], 0)} 100%)")
+    return (f'<div class="{cls}" style="left:{left:.1f}%;top:{top:.1f}%;width:{w:.1f}%;height:{h:.1f}%;'
+            f'background:{bg};--d:{d:.0f}s;--delay:{-rng.uniform(0, d):.0f}s;'
+            f'--x1:{drift()};--y1:{drift()};--x2:{drift()};--y2:{drift()};--x3:{drift()};--y3:{drift()}"></div>')
+
+def blobs_html(pal, blobs, leak, seed):
+    rng = random.Random(seed * 7919)
+    x, y, rx, ry = leak
+    leak_b = dict(x=x, y=y, rx=rx, ry=ry, color=pal["leak"], alpha=.95)
+    return ('<div class="skin-blobs" aria-hidden="true">' + "".join(blob_div(b, rng) for b in blobs)
+            + blob_div(leak_b, rng, cls="skin-leak", dur=40) + "</div>")
+
 # --------------------------------------------------------------------------- css
 def build_css(pal, blobs, leak, opts):
     layers = [css_leak(pal, leak)] + [css_blob(b) for b in blobs]
+    if opts.get("animate"):
+        # static fallback stays as the background (renders before JS-free animation kicks in and for
+        # reduced-motion users); the moving copy sits on top in .skin-blobs
+        pass
     dark = pal is PALETTES.get("ink") or opts.get("dark")
     dot = "rgba(255,255,255,.10)" if dark else "rgba(15,15,15,.09)"
     grid = ""
     if opts.get("grid", True):
         grid = f"""
-.haze::before {{
+.skin::before {{
   content:""; position:absolute; inset:0; pointer-events:none;
   background-image: radial-gradient({dot} 0.9px, transparent 1.1px);
   background-size: {opts.get('grid_size', 22)}px {opts.get('grid_size', 22)}px;
@@ -197,44 +241,45 @@ def build_css(pal, blobs, leak, opts):
     grain = ""
     if opts.get("grain", 0) > 0:
         grain = f"""
-.haze::after {{
+.skin::after {{
   content:""; position:absolute; inset:0; pointer-events:none;
   background-image: url("{GRAIN_SVG}");
   opacity:{opts['grain']:.2f}; mix-blend-mode:{'screen' if dark else 'multiply'};
 }}"""
+    anim = ANIM_CSS if opts.get("animate") else ""
     return f"""
-.haze {{
-  --haze-base: {pal['base']};
-  --haze-ink: {pal['ink']};
+.skin {{
+  --skin-base: {pal['base']};
+  --skin-ink: {pal['ink']};
   position:relative; overflow:hidden; isolation:isolate;
-  background-color: var(--haze-base);
+  background-color: var(--skin-base);
   background-image:
     {(',' + chr(10) + '    ').join(layers)};
   background-repeat:no-repeat; background-size:100% 100%;
-  color: var(--haze-ink);
-}}{grid}{grain}
+  color: var(--skin-ink);
+}}{grid}{grain}{anim}
 """
 
 TYPE_CSS = """
-.haze { font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; -webkit-font-smoothing:antialiased; }
-.haze .serif { font-family: "Instrument Serif", "Iowan Old Style", "Playfair Display", Georgia, "Times New Roman", serif; font-weight:400; }
-.haze .mono  { font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-.haze-content { position:relative; z-index:1; min-height:100%; display:flex; flex-direction:column; }
-.haze-wordmark { position:absolute; top:34px; left:0; right:0; text-align:center; font-size:28px; letter-spacing:-.01em; }
-.haze-panels { flex:1; display:grid; grid-template-columns: repeat(var(--n,1), 1fr); align-items:center; padding: 120px 6vw 96px; gap: 4vw; }
-.haze-panel { text-align:center; display:flex; flex-direction:column; align-items:center; }
-.haze-eyebrow { font-size:11px; letter-spacing:.38em; text-transform:uppercase; opacity:.5; margin-bottom:22px; }
-.haze-h1 { font-size: clamp(56px, 7.6vw, 128px); line-height:.92; letter-spacing:-.025em; margin:0 0 22px; }
-.haze-h1 em { font-style:italic; letter-spacing:-.02em; }
-.haze-sub { font-size: 19px; line-height:1.5; opacity:.62; max-width: 34ch; margin:0 0 26px; }
-.haze-badge { display:inline-block; font-size:10px; letter-spacing:.3em; text-transform:uppercase; padding:8px 16px; border-radius:999px; border:1px solid color-mix(in srgb, currentColor 18%, transparent); background: color-mix(in srgb, var(--haze-base) 55%, transparent); margin-bottom:30px; }
-.haze-cta { font-size:17px; font-weight:500; text-decoration:none; color:inherit; }
-.haze-cta span { display:inline-block; margin-left:.45em; transition:transform .2s; }
-.haze-cta:hover span { transform:translateX(3px); }
-.haze-footer { position:absolute; bottom:22px; left:0; right:0; text-align:center; font-size:10px; letter-spacing:.32em; text-transform:uppercase; opacity:.42; }
-.haze-topbar { height:44px; background:#000; }
-.haze-topbar + .haze-wordmark { top:78px; }
-@media (max-width: 760px) { .haze-panels { grid-template-columns:1fr; padding:110px 8vw 80px; gap:64px; } .haze-h1 { font-size: clamp(52px, 15vw, 96px); } }
+.skin { font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; -webkit-font-smoothing:antialiased; }
+.skin .serif { font-family: "Instrument Serif", "Iowan Old Style", "Playfair Display", Georgia, "Times New Roman", serif; font-weight:400; }
+.skin .mono  { font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.skin-content { position:relative; z-index:1; min-height:100%; display:flex; flex-direction:column; }
+.skin-wordmark { position:absolute; top:34px; left:0; right:0; text-align:center; font-size:28px; letter-spacing:-.01em; }
+.skin-panels { flex:1; display:grid; grid-template-columns: repeat(var(--n,1), 1fr); align-items:center; padding: 120px 6vw 96px; gap: 4vw; }
+.skin-panel { text-align:center; display:flex; flex-direction:column; align-items:center; }
+.skin-eyebrow { font-size:11px; letter-spacing:.38em; text-transform:uppercase; opacity:.5; margin-bottom:22px; }
+.skin-h1 { font-size: clamp(56px, 7.6vw, 128px); line-height:.92; letter-spacing:-.025em; margin:0 0 22px; }
+.skin-h1 em { font-style:italic; letter-spacing:-.02em; }
+.skin-sub { font-size: 19px; line-height:1.5; opacity:.62; max-width: 34ch; margin:0 0 26px; }
+.skin-badge { display:inline-block; font-size:10px; letter-spacing:.3em; text-transform:uppercase; padding:8px 16px; border-radius:999px; border:1px solid color-mix(in srgb, currentColor 18%, transparent); background: color-mix(in srgb, var(--skin-base) 55%, transparent); margin-bottom:30px; }
+.skin-cta { font-size:17px; font-weight:500; text-decoration:none; color:inherit; }
+.skin-cta span { display:inline-block; margin-left:.45em; transition:transform .2s; }
+.skin-cta:hover span { transform:translateX(3px); }
+.skin-footer { position:absolute; bottom:22px; left:0; right:0; text-align:center; font-size:10px; letter-spacing:.32em; text-transform:uppercase; opacity:.42; }
+.skin-topbar { height:44px; background:#000; }
+.skin-topbar + .skin-wordmark { top:78px; }
+@media (max-width: 760px) { .skin-panels { grid-template-columns:1fr; padding:110px 8vw 80px; gap:64px; } .skin-h1 { font-size: clamp(52px, 15vw, 96px); } }
 """
 
 # --------------------------------------------------------------------------- html
@@ -244,37 +289,37 @@ def esc(s):
 def panel_html(p):
     h = ""
     if p.get("eyebrow"):
-        h += f'<div class="haze-eyebrow mono">{esc(p["eyebrow"])}</div>'
+        h += f'<div class="skin-eyebrow mono">{esc(p["eyebrow"])}</div>'
     if p.get("headline") or p.get("italic"):
-        h += '<h1 class="haze-h1 serif">'
+        h += '<h1 class="skin-h1 serif">'
         if p.get("headline"):
             h += esc(p["headline"])
         if p.get("italic"):
             h += ('<br>' if p.get("headline") else '') + f'<em>{esc(p["italic"])}</em>'
         h += '</h1>'
     if p.get("sub"):
-        h += f'<p class="haze-sub">{esc(p["sub"])}</p>'
+        h += f'<p class="skin-sub">{esc(p["sub"])}</p>'
     if p.get("badge"):
-        h += f'<div class="haze-badge mono">{esc(p["badge"])}</div>'
+        h += f'<div class="skin-badge mono">{esc(p["badge"])}</div>'
     if p.get("cta"):
-        h += f'<a class="haze-cta" href="{esc(p.get("href", "#"))}">{esc(p["cta"])}<span>&rarr;</span></a>'
-    return f'<div class="haze-panel">{h}</div>'
+        h += f'<a class="skin-cta" href="{esc(p.get("href", "#"))}">{esc(p["cta"])}<span>&rarr;</span></a>'
+    return f'<div class="skin-panel">{h}</div>'
 
-def build_html(spec, css, w, h, standalone_size=True):
+def build_html(spec, css, w, h, standalone_size=True, blobs_markup=""):
     fonts = font_head(spec.get("fonts") or "google")
     panels = spec.get("panels") or []
     content = ""
     if not spec.get("blank"):
         if spec.get("topbar"):
-            content += '<div class="haze-topbar"></div>'
+            content += '<div class="skin-topbar"></div>'
         if spec.get("wordmark"):
-            content += f'<div class="haze-wordmark serif">{esc(spec["wordmark"])}</div>'
+            content += f'<div class="skin-wordmark serif">{esc(spec["wordmark"])}</div>'
         if panels:
-            content += f'<div class="haze-panels" style="--n:{len(panels)}">' + "".join(panel_html(p) for p in panels) + "</div>"
+            content += f'<div class="skin-panels" style="--n:{len(panels)}">' + "".join(panel_html(p) for p in panels) + "</div>"
         if spec.get("footer"):
-            content += f'<div class="haze-footer mono">{esc(spec["footer"])}</div>'
-    size_css = f"html,body{{margin:0;height:100%}} .haze{{width:{w}px;height:{h}px}}" if standalone_size else "html,body{margin:0;height:100%} .haze{min-height:100vh}"
-    title = esc(spec.get("title") or spec.get("wordmark") or "Haze")
+            content += f'<div class="skin-footer mono">{esc(spec["footer"])}</div>'
+    size_css = f"html,body{{margin:0;height:100%}} .skin{{width:{w}px;height:{h}px}}" if standalone_size else "html,body{margin:0;height:100%} .skin{min-height:100vh}"
+    title = esc(spec.get("title") or spec.get("wordmark") or "gradient.skin")
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{title}</title>
@@ -284,7 +329,7 @@ def build_html(spec, css, w, h, standalone_size=True):
 {css}
 {TYPE_CSS}
 </style></head>
-<body><section class="haze"><div class="haze-content">{content}</div></section></body></html>
+<body><section class="skin">{blobs_markup}<div class="skin-content">{content}</div></section></body></html>
 """
 
 # --------------------------------------------------------------------------- svg (no browser needed)
@@ -347,7 +392,7 @@ def render_png(html_path, out, w, h, scale):
 # --------------------------------------------------------------------------- main
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--out", default="haze.html")
+    ap.add_argument("--out", default="skin.html")
     ap.add_argument("--format", choices=["html", "png", "svg", "css"], default=None, help="inferred from --out extension if omitted")
     ap.add_argument("--size", default="1600x900", help="WxH px, e.g. 1200x630 (OG), 1600x900 (X), 1080x1080")
     ap.add_argument("--scale", type=float, default=2, help="device pixel ratio for PNG (2 = retina)")
@@ -364,6 +409,7 @@ def main():
                     help="google (default for html), local (default for png; vendored files), embed (base64, self-contained), system")
     ap.add_argument("--topbar", action="store_true", help="44px black bar across the top")
     ap.add_argument("--blank", action="store_true", help="no text, just the background")
+    ap.add_argument("--animate", action="store_true", help="blobs drift slowly like water (HTML/PNG only; CSS output prints the markup in a comment)")
     ap.add_argument("--spec", help="JSON file with wordmark/panels/footer etc. (see SKILL.md)")
     # single-panel shortcuts
     ap.add_argument("--wordmark"); ap.add_argument("--eyebrow"); ap.add_argument("--headline")
@@ -382,6 +428,7 @@ def main():
         if v not in (None, ap.get_default(k)) or k not in spec:
             spec[k] = v if v is not None else spec.get(k)
     if a.blank: spec["blank"] = True
+    if a.animate: spec["animate"] = True
     if a.topbar: spec["topbar"] = True
     if a.no_grid: spec["grid"] = False
     spec.setdefault("grid", True)
@@ -389,8 +436,8 @@ def main():
     if any(getattr(a, k) for k in ("eyebrow", "headline", "italic", "sub", "badge", "cta")):
         spec["panels"] = [dict(eyebrow=a.eyebrow, headline=a.headline, italic=a.italic, sub=a.sub, badge=a.badge, cta=a.cta, href=a.href)]
     if not spec.get("panels") and not spec.get("blank"):
-        spec["panels"] = [dict(eyebrow="Haze", headline="Soft light,", italic="on demand.", sub="A pastel mesh gradient with a dot grid and editorial type. Change the words, keep the glow.", badge="Live", cta="Enter")]
-        spec.setdefault("wordmark", "Haze.")
+        spec["panels"] = [dict(eyebrow="gradient.skin", headline="Soft light,", italic="on demand.", sub="A pastel mesh gradient with a dot grid and editorial type. Change the words, keep the glow.", badge="Live", cta="Enter")]
+        spec.setdefault("wordmark", "gradient.skin")
 
     pal = dict(PALETTES[spec.get("palette") or "dawn"])
     if spec.get("colors"):
@@ -405,21 +452,24 @@ def main():
     w, h = parse_size(spec.get("size") or a.size)
     rng = random.Random(int(spec.get("seed") or 1))
     blobs, leak = make_blobs(pal, spec.get("layout") or "split", rng, float(spec.get("intensity") or 1.0))
-    css = build_css(pal, blobs, leak, dict(grid=spec["grid"], grid_size=a.grid_size, grain=float(spec.get("grain") or 0), dark=spec.get("dark")))
+    css = build_css(pal, blobs, leak, dict(grid=spec["grid"], grid_size=a.grid_size, grain=float(spec.get("grain") or 0), dark=spec.get("dark"), animate=spec.get("animate")))
+    markup = blobs_html(pal, blobs, leak, int(spec.get("seed") or 1)) if spec.get("animate") else ""
 
     fmt = a.format or os.path.splitext(a.out)[1].lstrip(".").lower() or "html"
     if not spec.get("fonts"):
         spec["fonts"] = "local" if fmt == "png" else "google"
     if fmt == "css":
         sys.stdout.write(css + ("\n/* type helpers */" + TYPE_CSS if not spec.get("blank") else ""))
+        if markup:
+            sys.stdout.write("\n/* --animate: put this markup as the FIRST child of .skin */\n/*\n" + markup + "\n*/\n")
         return
     if fmt == "svg":
         with open(a.out, "w") as f: f.write(build_svg(pal, blobs, leak, spec, w, h))
     elif fmt == "html":
-        with open(a.out, "w") as f: f.write(build_html(spec, css, w, h, standalone_size=not a.responsive))
+        with open(a.out, "w") as f: f.write(build_html(spec, css, w, h, standalone_size=not a.responsive, blobs_markup=markup))
     elif fmt == "png":
         html_path = os.path.splitext(a.out)[0] + ".html"
-        with open(html_path, "w") as f: f.write(build_html(spec, css, w, h))
+        with open(html_path, "w") as f: f.write(build_html(spec, css, w, h, blobs_markup=markup))
         render_png(os.path.abspath(html_path), os.path.abspath(a.out), w, h, a.scale)
     print(f"wrote {a.out}  ({fmt}, {w}x{h}, palette={spec.get('palette')}, layout={spec.get('layout')}, seed={spec.get('seed')})")
 

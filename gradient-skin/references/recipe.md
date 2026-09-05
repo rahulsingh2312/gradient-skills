@@ -1,7 +1,7 @@
-# The Haze recipe, by hand
+# The gradient.skin recipe, by hand
 
 Use this when the gradient has to live inside the user's own codebase (React, Tailwind, Svelte, plain CSS)
-rather than as a file the script produced. `python3 scripts/haze.py --blank --format css` prints a
+rather than as a file the script produced. `python3 scripts/skin.py --blank --format css` prints a
 ready-made block; this document explains what's in it so you can adapt it.
 
 ## 1. Anatomy
@@ -24,7 +24,7 @@ sweet spot; fewer looks flat, more looks muddy.
 ## 2. Minimal plain-CSS version (the reference look)
 
 ```css
-.haze {
+.skin {
   position: relative; overflow: hidden; isolation: isolate;
   background-color: #f6f5f1;
   background-image:
@@ -40,13 +40,13 @@ sweet spot; fewer looks flat, more looks muddy.
   background-repeat: no-repeat; background-size: 100% 100%;
   color: #121212;
 }
-.haze::before {              /* dot grid */
+.skin::before {              /* dot grid */
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background-image: radial-gradient(rgba(15,15,15,.09) .9px, transparent 1.1px);
   background-size: 22px 22px;
   mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, #000 40%, transparent 100%);
 }
-.haze > * { position: relative; z-index: 1; }
+.skin > * { position: relative; z-index: 1; }
 ```
 
 ## 3. Tailwind
@@ -64,13 +64,13 @@ Put the palette in `tailwind.config` as a `backgroundImage` entry, or use arbitr
 ```
 
 Tailwind arbitrary values can't contain spaces — use `_`. For anything longer than two blobs, a
-`@layer utilities { .bg-haze { ... } }` block in the global CSS is cleaner.
+`@layer utilities { .bg-skin { ... } }` block in the global CSS is cleaner.
 
 ## 4. React component (drop-in)
 
 ```tsx
-export function Haze({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <section className={`haze ${className}`}>{children}</section>;
+export function gradient.skin({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return <section className={`skin ${className}`}>{children}</section>;
 }
 ```
 …with the CSS from §2 in a global stylesheet. Keep it a plain CSS class rather than inline styles so the
@@ -90,19 +90,41 @@ h1.display em { font-style: italic; }
 Google Fonts link: `family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500`.
 Alternatives with the same feel: Fraunces (softer), Newsreader (more bookish), Playfair Display (more fashion).
 
-## 6. Optional: slow drift animation
+## 6. Optional: drift animation ("moving like water")
+
+Animating `background-position` on a nine-layer background looks like a scrolling texture. What reads as
+water is each blob moving on its own clock. So `--animate` turns every blob into an absolutely positioned
+element with its own duration, delay, and three-point path, all `alternate` so nothing ever jumps:
+
+```html
+<section class="skin">
+  <div class="skin-blobs" aria-hidden="true">
+    <div class="skin-blob" style="left:-20%;top:-19%;width:69%;height:79%;
+         background:radial-gradient(closest-side, rgba(182,240,220,.95), rgba(182,240,220,.52) 45%, rgba(182,240,220,0));
+         --d:31s;--delay:-12s;--x1:6%;--y1:-4%;--x2:-5%;--y2:7%;--x3:3%;--y3:2%"></div>
+    <!-- …7 more blobs, then the white leak with class skin-leak -->
+  </div>
+  <div class="skin-content">…</div>
+</section>
+```
 
 ```css
-@keyframes haze-drift {
-  0%   { background-position: 0% 0%,  0% 0%,  0% 0%,  0% 0%,  0% 0%,  0% 0%,  0% 0%,  0% 0%,  0% 0%; }
-  50%  { background-position: 0% 0%, -3% 2%,  2% -2%, -2% 3%,  3% 1%, -2% -3%,  2% 2%, -3% 1%,  1% -2%; }
-  100% { background-position: 0% 0%,  0% 0%,  0% 0%,  0% 0%,  0% 0%,  0% 0%,  0% 0%,  0% 0%,  0% 0%; }
-}
-.haze.animated { background-size: 110% 110%; animation: haze-drift 48s ease-in-out infinite; }
-@media (prefers-reduced-motion: reduce) { .haze.animated { animation: none; } }
+.skin-blobs{position:absolute;inset:-12%;pointer-events:none;z-index:0;overflow:hidden}
+.skin-blob,.skin-leak{position:absolute;border-radius:50%;will-change:transform;
+  animation:skin-drift var(--d,30s) ease-in-out var(--delay,0s) infinite alternate}
+@keyframes skin-drift{
+  0%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(var(--x1),var(--y1)) scale(1.07)}
+  66%{transform:translate(var(--x2),var(--y2)) scale(.95)}
+  100%{transform:translate(var(--x3),var(--y3)) scale(1.04)}}
+@media (prefers-reduced-motion:reduce){.skin-blob,.skin-leak{animation:none}}
+.skin::before{z-index:1} .skin-content{position:relative;z-index:2}
 ```
-Set `background-size` above 100% so there is slack to move. Keep cycles ≥ 40 s; fast drift looks like a
-loading screen.
+
+The static nine-layer background stays underneath as the resting frame, so the page looks right before
+the first paint of the animation and for reduced-motion users. `python3 scripts/skin.py --animate --blank
+--format css` prints all of it, markup included. Keep durations above 20 s and drift under 10% of the box;
+faster or further and it reads as a loading screen.
 
 ## 7. Dark variant
 
@@ -114,7 +136,7 @@ Same structure with `base: #0d0e12`, blob colours around 20–30% lightness (`#1
 
 - Blobs under 35% of the box → visible circles.
 - Hard stops (anything ending above ~75%) → visible edges.
-- Saturated colours (`#ff00aa`) → neon, not haze. Lift lightness first.
+- Saturated colours (`#ff00aa`) → neon, not skin. Lift lightness first.
 - Pure black text or 1px borders around content → the softness collapses.
 - A dot grid you can count → halve the opacity.
 - `filter: blur()` on the whole section → blurs the text too; keep blur inside `background-image` (radial

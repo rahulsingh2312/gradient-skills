@@ -1,8 +1,8 @@
-# Haze palettes
+# gradient.skin palettes
 
 Each palette is four *cool* colours, four *warm* colours, a base paper colour, a light-leak colour and an
 ink colour. With `--layout split` the cool four sit on the left, the warm four on the right. Values are
-in `scripts/haze.py` (`PALETTES`); this file says what they feel like and when to reach for them.
+in `scripts/skin.py` (`PALETTES`); this file says what they feel like and when to reach for them.
 
 | name | cool → warm | feel | reach for it when |
 |---|---|---|---|
@@ -29,7 +29,7 @@ Given one brand hex (say `#5B4BFF`, an electric violet):
 6. Ink: the brand hue at 20% saturation, 7% lightness → `#0f0e1a`.
 
 ```bash
-python3 scripts/haze.py --colors "#d6d0ff,#cfe1ff,#c8f4ec,#f0cdf5,#f9efc6,#f2db95,#f8d6c0,#f8e2dc" --base "#f4f3f8"
+python3 scripts/skin.py --colors "#d6d0ff,#cfe1ff,#c8f4ec,#f0cdf5,#f9efc6,#f2db95,#f8d6c0,#f8e2dc" --base "#f4f3f8"
 ```
 
 Sanity checks: every colour ≥ 82% lightness; at least one hue jump ≥ 90° between the two sides; no two

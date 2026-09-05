@@ -15,6 +15,6 @@
 Regenerate after editing `hero.json`:
 
 ```bash
-python3 haze/scripts/haze.py --spec launch/hero.json --size 1600x900 --out launch/images/hero-x.png
-python3 haze/scripts/haze.py --spec launch/hero.json --size 1200x630 --out launch/images/og.png
+python3 gradient-skin/scripts/skin.py --spec launch/hero.json --size 1600x900 --out launch/images/hero-x.png
+python3 gradient-skin/scripts/skin.py --spec launch/hero.json --size 1200x630 --out launch/images/og.png
 ```

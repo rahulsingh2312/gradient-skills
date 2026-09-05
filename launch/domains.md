@@ -1,24 +1,18 @@
-# Domain shortlist for Haze
+# Domain: gradient.skin
 
-Availability could not be checked from the build sandbox (RDAP/WHOIS blocked). Check these at your
-registrar before announcing. Ranked by preference.
+The name *is* the domain. `.skin` is a real TLD (Radix; sold at Namecheap, Porkbun, GoDaddy, Cloudflare
+does not carry it). Availability could not be checked from the build sandbox, so verify at your registrar
+before announcing. Typical price is $15–30/yr; short dictionary words are sometimes flagged premium.
 
-| domain | why | risk |
-|---|---|---|
-| **haze.design** | says exactly what it is; .design is cheap-ish and designers trust it | may be taken; premium price possible |
-| **haze.sh** | dev-tool feel, short, matches the CLI vibe | .sh is often taken for short words |
-| **gethaze.dev** | almost certainly available; "get" prefix is a known pattern | slightly generic |
-| **usehaze.com** | .com trust, "use" prefix common for dev tools | generic |
-| **haze.skill** | not a real TLD today — skip | — |
-| **hazegradient.com** | descriptive, SEO-friendly | long, less brandable |
-| **haze.wtf / haze.lol** | meme-y, cheap, good for a launch that leans playful | not serious enough if you want this to grow |
-| **hazecss.com** | clear, but undersells the html/png side | narrow |
-| **tryhaze.dev** | fine fallback | forgettable |
+| domain | role |
+|---|---|
+| **gradient.skin** | the product. Point it at `site/index.html` (GitHub Pages / Vercel / Cloudflare Pages) |
+| gradientskin.com | catch typos and people who don't trust new TLDs; redirect to gradient.skin |
+| gradient-skin.dev | optional, matches the GitHub folder and slash command; redirect |
 
-Recommendation: buy **gethaze.dev** now (near-certain availability, ~$12) so the launch has a link,
-and put an offer on **haze.design** if it's parked. Point both at the `site/index.html` page in this repo
-(GitHub Pages, Vercel, or Cloudflare Pages — it's a single static file).
+Things to grab at the same time, since they're free and someone else will otherwise:
+- X handle `@gradientskin`
+- GitHub topic / repo rename to `gradient-skin` when you're ready (the branch already uses that folder name)
+- npm name `gradient-skin` if you ever ship the script as a package
 
-If "haze" is taken everywhere and you want a rename, the other names that tested well for this look:
-**Bloom**, **Sheen**, **Nimbus**, **Sorbet** (conflicts with Stripe's Ruby tool), **Glaze** (conflicts
-with the anti-AI art tool). Avoid "Aurora" and "Mesh" — too many existing gradient tools use them.
+Slash command is `/gradient-skin` (skill names can't contain a dot). Brand is always written lowercase, `gradient.skin`.
