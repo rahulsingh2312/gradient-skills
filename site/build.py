@@ -9,6 +9,59 @@ REPO = "https://github.com/rahulsingh2312/gradient-skills"
 SITE = "https://gradient-skin.vercel.app"   # switch to https://gradient.skin once the domain resolves
 PALS = list(skin.PALETTES)
 
+# --- analytics -------------------------------------------------------------
+# Vercel Web Analytics is cookieless and needs no key: flip it on in the Vercel
+# project (Analytics tab) and the script below starts reporting. PostHog is
+# optional: paste the project key here or export POSTHOG_KEY before building.
+VERCEL_ANALYTICS = True
+POSTHOG_KEY = os.environ.get("POSTHOG_KEY", "")
+POSTHOG_HOST = os.environ.get("POSTHOG_HOST", "https://us.i.posthog.com")
+
+analytics_head = ""
+if VERCEL_ANALYTICS:
+    analytics_head += ('<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>'
+                       '<script defer src="/_vercel/insights/script.js"></script>')
+if POSTHOG_KEY:
+    analytics_head += (
+        "<script>!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){"
+        "function g(t,e){var o=e.split('.');2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){"
+        "t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement('script')).type="
+        "'text/javascript',p.crossOrigin='anonymous',p.async=!0,p.src=s.api_host.replace('.i.posthog.com',"
+        "'-assets.i.posthog.com')+'/static/array.js',(r=t.getElementsByTagName('script')[0]).parentNode"
+        ".insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a='posthog',u.people=u.people||[],u.toString="
+        "function(t){var e='posthog';return'posthog'!==a&&(e+='.'+a),t||(e+=' (stub)'),e},u.people.toString="
+        "function(){return u.toString(1)+'.people (stub)'},o='init capture identify alias people set "
+        "set_once register register_once unregister opt_out_capturing has_opted_out_capturing "
+        "opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload "
+        "reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures "
+        "getActiveMatchingSurveys getSurveys'.split(' '),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},"
+        "e.__SV=1)}(document,window.posthog||[]);"
+        f"posthog.init('{POSTHOG_KEY}',{{api_host:'{POSTHOG_HOST}',person_profiles:'identified_only',"
+        "defaults:'2025-05-24'});</script>")
+
+# one call, whichever backends are on the page
+analytics_js = """
+  // analytics: one helper, whichever backend is loaded
+  function track(name, props){ try{ if(window.posthog&&posthog.capture) posthog.capture(name, props||{});
+    if(window.va) va('event',{name:name, data:props||{}}); }catch(e){} }
+  document.querySelectorAll('[data-copy]').forEach(function(b){
+    b.addEventListener('click', function(){ track('install_copy', {where:'hero'}); }); });
+  document.querySelectorAll('a[href="/skill"]').forEach(function(a){
+    a.addEventListener('click', function(){ track('skill_download', {}); }); });
+  document.querySelectorAll('a[href^="https://github.com/"]').forEach(function(a){
+    a.addEventListener('click', function(){ track('github_click', {}); }); });
+  document.querySelectorAll('.tile').forEach(function(t){
+    t.addEventListener('click', function(){ track('palette_click', {palette:(t.className.match(/sk-([a-z]+)/)||[])[1]}); }); });
+  var draggedOnce=false;
+  hero.addEventListener('pointerdown', function(){ if(!draggedOnce){ draggedOnce=true; track('slider_drag', {}); } });
+  var sawInstall=false, installEl=document.getElementById('install');
+  if(installEl && 'IntersectionObserver' in window){
+    new IntersectionObserver(function(es){ es.forEach(function(e){
+      if(e.isIntersecting && !sawInstall){ sawInstall=true; track('install_section_view', {}); } }); },
+      {threshold:.4}).observe(installEl);
+  }
+"""
+
 def gradient(pal_name, seed, animate=False, cls=None, intensity=1.0):
     pal = dict(skin.PALETTES[pal_name])
     blobs, leak = skin.make_blobs(pal, "split", random.Random(seed), intensity)
@@ -37,6 +90,7 @@ html = f'''<!doctype html>
 <meta name="theme-color" content="#f6f5f1"><link rel="canonical" href="{SITE}/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%23b6f0dc%27/%3E%3Cstop offset=%27.5%27 stop-color=%27%23fbfaf6%27/%3E%3Cstop offset=%271%27 stop-color=%27%23f2db95%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27url(%23g)%27/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+{analytics_head}
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 html,body{{margin:0}} body{{font-family:Inter,ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#121212;background:#f6f5f1}}
@@ -166,6 +220,7 @@ footer{{text-align:center;padding:48px 6vw 64px;font-size:12px;opacity:.5}} foot
   grip.addEventListener('keydown',function(e){{ var d=e.key==='ArrowLeft'?-4:e.key==='ArrowRight'?4:0; if(d){{ touched=true; cancelAnimationFrame(raf); set(cut+d); e.preventDefault(); }} }});
   // copy buttons (both layers)
   document.querySelectorAll('[data-copy]').forEach(function(b){{ b.addEventListener('click',function(){{ navigator.clipboard.writeText('curl -fsSL gradient.skin/install | sh'); document.querySelectorAll('[data-copy] small').forEach(function(s){{s.textContent='copied';}}); }}); }});
+{analytics_js}
 }})();
 </script>
 </body></html>'''
