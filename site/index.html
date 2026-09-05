@@ -96,10 +96,10 @@ h2{font-size:clamp(36px,4.5vw,56px);letter-spacing:-.02em;line-height:1;margin:0
   background-size: 22px 22px;
   mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, #000 40%, transparent 100%);
 }
-.after-after-blobs { position:absolute; inset:-12%; pointer-events:none; z-index:0; overflow:hidden; }
-.after-after-blob  { position:absolute; border-radius:50%; will-change:transform;
+.after-blobs { position:absolute; inset:-12%; pointer-events:none; z-index:0; overflow:hidden; }
+.after-blob  { position:absolute; border-radius:50%; will-change:transform;
               animation: after-drift var(--d,30s) ease-in-out var(--delay,0s) infinite alternate; }
-.after-after-leak  { position:absolute; border-radius:50%; will-change:transform;
+.after-leak  { position:absolute; border-radius:50%; will-change:transform;
               animation: after-drift 40s ease-in-out -7s infinite alternate; }
 @keyframes after-drift {
   0%   { transform: translate(0,0) scale(1) rotate(0deg); }
@@ -107,8 +107,8 @@ h2{font-size:clamp(36px,4.5vw,56px);letter-spacing:-.02em;line-height:1;margin:0
   66%  { transform: translate(var(--x2), var(--y2)) scale(.95) rotate(-2deg); }
   100% { transform: translate(var(--x3), var(--y3)) scale(1.04) rotate(1deg); }
 }
-@media (prefers-reduced-motion: reduce) { .after-after-blob, .after-after-leak { animation:none; } }
-.after-skin::before { z-index:1; } .after-skin::after { z-index:1; } .after-after-content { z-index:2; }
+@media (prefers-reduced-motion: reduce) { .after-blob, .after-leak { animation:none; } }
+.after-skin::before { z-index:1; } .after-skin::after { z-index:1; } .after-content { z-index:2; }
 
 
 .after-skin{position:absolute;inset:0}

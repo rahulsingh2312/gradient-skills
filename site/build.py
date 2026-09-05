@@ -18,9 +18,11 @@ def gradient(pal_name, seed, animate=False, cls=None, intensity=1.0):
     return css, markup
 
 hero_css, hero_blobs = gradient("dawn", 3, animate=True)
-after_css, after_blobs = gradient("dawn", 3, animate=True, cls="after-skin", intensity=1.15)
-after_css = after_css.replace("skin-blobs", "after-blobs").replace("skin-blob", "after-blob").replace("skin-leak", "after-leak").replace("skin-drift", "after-drift").replace("skin-content", "after-content")
-after_blobs = after_blobs.replace("skin-blobs", "after-blobs").replace("skin-blob", "after-blob").replace("skin-leak", "after-leak")
+after_css, after_blobs = gradient("dawn", 3, animate=True, intensity=1.15)
+for a, b in (("skin-blobs", "after-blobs"), ("skin-blob", "after-blob"), ("skin-leak", "after-leak"),
+             ("skin-drift", "after-drift"), ("skin-content", "after-content"), (".skin", ".after-skin")):
+    after_css = after_css.replace(a, b)
+    after_blobs = after_blobs.replace(a, b)
 tiles_css = "".join(gradient(p, 2, cls=f"sk-{p}")[0] for p in PALS)
 tiles = "".join(f'<a class="tile sk-{p}" href="#install"><span class="mono">--palette {p}</span></a>' for p in PALS)
 
