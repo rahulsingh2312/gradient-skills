@@ -1,6 +1,6 @@
 # X Article — paste-ready
 
-**Cover:** `images/article-thumb.png` (the hero frozen halfway).
+**Cover:** `images/article-thumb.png` (crossed-out swatch vs ours). In-article banner: `images/article-banner.png`.
 **Post text that carries the article** (pick one, the article card sits under it):
 
 > A · 111,000 people laughed at a screenshot of a gradient last month. they all recognised it.
