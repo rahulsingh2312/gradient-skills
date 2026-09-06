@@ -73,9 +73,10 @@ SIZES = {  # named presets for --size
     "og": "1200x630", "x": "1600x900", "twitter": "1600x900", "square": "1080x1080", "story": "1080x1920",
     "linkedin": "1200x627", "wallpaper": "2560x1440", "4k": "3840x2160", "page": "2000x1300", "banner": "1920x768",
     "hd": "1920x1080", "mobile": "390x844",
+    "avatar": "1080x1080", "pfp": "400x400", "header": "1500x500", "x-header": "1500x500",
 }
 
-LAYOUTS = ("split", "corners", "wash", "halo")
+LAYOUTS = ("split", "corners", "wash", "halo", "avatar", "strip")
 
 GOOGLE_LINK = (
     '<link rel="preconnect" href="https://fonts.googleapis.com">'
@@ -187,9 +188,10 @@ def make_blobs(pal, layout, rng, intensity=1.0):
     j = lambda amt: rng.uniform(-amt, amt)
     blobs = []
 
-    def add(x, y, rx, ry, color, alpha):
+    def add(x, y, rx, ry, color, alpha, soft=False):
+        # soft = slower falloff, so overlapping blobs fill the middle instead of fading out early
         blobs.append(dict(x=x + j(5), y=y + j(5), rx=rx + j(6), ry=ry + j(6),
-                          color=color, alpha=min(1.0, alpha * intensity)))
+                          color=color, alpha=min(1.0, alpha * intensity), soft=soft))
 
     if layout == "split":
         # cool cluster left, warm cluster right, white seam up the middle (the reference)
@@ -216,6 +218,25 @@ def make_blobs(pal, layout, rng, intensity=1.0):
         for i in range(8):
             add(rng.uniform(0, 100), rng.uniform(0, 100), 38, 46, cs[i % len(cs)], .70)
         leak = (50, 45, 40, 50)
+    elif layout == "avatar":
+        # halo pulled inward: colour reaches the middle instead of leaving a bright gap, and the
+        # leak is a soft warm glow rather than a white hole. For profile pictures, app icons,
+        # anything cropped to a circle — there is no headline to frame.
+        ring = [cool[0], warm[0], cool[1], warm[1], cool[2], warm[2], cool[3], warm[3]]
+        import math
+        for i, c in enumerate(ring):
+            a = i / len(ring) * 2 * math.pi + .5
+            add(46 + 40 * math.cos(a), 52 + 42 * math.sin(a), 56, 60, c, .95, soft=True)
+        leak = (44, 46, 38, 40, .60)   # 5th value = leak opacity: luminous, not blank
+    elif layout == "strip":
+        # colour spread along a wide arc, for headers and cover strips (3:1 and wider) where a
+        # centred cluster would leave both ends empty
+        ring = [cool[0], warm[0], cool[1], warm[1], cool[2], warm[2], cool[3], warm[3]]
+        for i, c in enumerate(ring):
+            x = 4 + i * (96 / (len(ring) - 1))
+            y = 18 if i % 2 == 0 else 84
+            add(x, y, 26, 95, c, .95, soft=True)
+        leak = (42, 48, 28, 66, .58)
     else:  # halo: a ring of colour around a bright centre — great for a single centred headline
         ring = cool[:2] + warm[:2] + cool[2:] + warm[2:]
         import math
@@ -227,14 +248,19 @@ def make_blobs(pal, layout, rng, intensity=1.0):
     return blobs, leak
 
 def css_blob(b):
+    # soft blobs hold their colour further out, so a ring of them fills the centre
+    mid_a, mid_stop, end_stop = (.60, 42, 82) if b.get("soft") else (.55, 32, 68)
     return (f"radial-gradient(ellipse {b['rx']:.0f}% {b['ry']:.0f}% at {b['x']:.0f}% {b['y']:.0f}%, "
-            f"{rgba(b['color'], b['alpha'])} 0%, {rgba(b['color'], b['alpha'] * .55)} 32%, "
-            f"{rgba(b['color'], 0)} 68%)")
+            f"{rgba(b['color'], b['alpha'])} 0%, {rgba(b['color'], b['alpha'] * mid_a)} {mid_stop}%, "
+            f"{rgba(b['color'], 0)} {end_stop}%)")
 
 def css_leak(pal, leak):
-    x, y, rx, ry = leak
+    # leak may carry a 5th value: how strong the light patch is. The default .95 is a near-solid
+    # white hole (right behind a headline); avatar/strip pass a lower one so colour shows through.
+    x, y, rx, ry = leak[:4]
+    a = leak[4] if len(leak) > 4 else .95
     return (f"radial-gradient(ellipse {rx}% {ry}% at {x}% {y}%, "
-            f"{rgba(pal['leak'], .95)} 0%, {rgba(pal['leak'], .55)} 38%, {rgba(pal['leak'], 0)} 72%)")
+            f"{rgba(pal['leak'], a)} 0%, {rgba(pal['leak'], a * .58)} 38%, {rgba(pal['leak'], 0)} 72%)")
 
 GRAIN_SVG = ("data:image/svg+xml;utf8,"
              "<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'>"
@@ -277,8 +303,8 @@ def blob_div(b, rng, cls="skin-blob", dur=None):
 
 def blobs_html(pal, blobs, leak, seed):
     rng = random.Random(seed * 7919)
-    x, y, rx, ry = leak
-    leak_b = dict(x=x, y=y, rx=rx, ry=ry, color=pal["leak"], alpha=.95)
+    x, y, rx, ry = leak[:4]
+    leak_b = dict(x=x, y=y, rx=rx, ry=ry, color=pal["leak"], alpha=leak[4] if len(leak) > 4 else .95)
     return ('<div class="skin-blobs" aria-hidden="true">' + "".join(blob_div(b, rng) for b in blobs)
             + blob_div(leak_b, rng, cls="skin-leak", dur=40) + "</div>")
 

@@ -23,6 +23,8 @@ run("--from-brand", "#5B4BFF", "--dark", "--out", f"{tmp}/brand-dark.html")
 run("--palette", "meadow", "--dark", "--align", "left", "--display-font", "Fraunces", "--out", f"{tmp}/left.html")
 run("--colors", "#d6d0ff,#cfe1ff,#c8f4ec,#f0cdf5,#f9efc6,#f2db95,#f8d6c0,#f8e2dc", "--base", "#f4f3f8", "--out", f"{tmp}/custom.html")
 run("--size", "og", "--layout", "halo", "--grain", "0.06", "--out", f"{tmp}/halo.html")
+run("--blank", "--layout", "avatar", "--size", "avatar", "--out", f"{tmp}/avatar.html")
+run("--blank", "--layout", "strip", "--size", "header", "--out", f"{tmp}/strip.html")
 run("--list-palettes")
 if "--png" in sys.argv:
     run("--palette", "dawn", "--size", "og", "--scale", "1", "--out", f"{tmp}/a.png")

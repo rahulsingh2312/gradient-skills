@@ -135,7 +135,32 @@ Same structure with `base: #0d0e12`, blob colours around 20–30% lightness (`#1
 `#4a3a1e`, `#5a2e3a` …), leak `#1c1d24`, dot grid `rgba(255,255,255,.10)`, grain with
 `mix-blend-mode: screen`. Ink `#f2f0ea`. `--palette ink` in the script produces exactly this.
 
-## 8. Things that break it
+## 8. Art with no text on it (avatars, headers, wallpapers)
+
+Every layout above reserves a bright white patch — the leak — because a headline sits on it. With no
+text there, that patch reads as an empty hole in the middle of the picture. Two changes fix it:
+
+1. **Pull the blobs inward** so they overlap in the centre. Ring radius ~40% of the box instead of
+   ~58%, blob radius up to ~56%, and hold the colour further out — stops at `0% / 42% / 82%` rather
+   than `0% / 32% / 68%`.
+2. **Weaken the leak** to about `.60` opacity and shrink it, so the centre reads as luminous rather
+   than blank. Offset it a little from dead centre; a light source that is not perfectly symmetrical
+   looks more like light and less like a lens flare.
+
+```css
+/* centre of an avatar: colour still visible, just brighter */
+radial-gradient(ellipse 38% 40% at 44% 46%,
+  rgba(255,253,248,.60) 0%, rgba(255,253,248,.35) 38%, rgba(255,253,248,0) 72%)
+```
+
+For a wide strip (3:1 headers), spread the blobs along a horizontal arc — alternating above and below
+the centre line, each one tall and narrow (`26% × 95%`) — or both ends of the banner come out empty.
+
+In the script: `--blank --layout avatar --size avatar` and `--blank --layout strip --size header`.
+Keep the dot grid on: at 7% it is the one detail that stops a soft gradient looking like everyone
+else's soft gradient.
+
+## 9. Things that break it
 
 - Blobs under 35% of the box → visible circles.
 - Hard stops (anything ending above ~75%) → visible edges.

@@ -56,10 +56,10 @@ to stdout.
 | `--from-brand #hex` | derive a palette from one colour | keeps the brand hue on the cool side, complement on the warm side |
 | `--dark` | dark twin of any palette or brand | blobs drop to ~18% lightness, grid flips to white |
 | `--colors` | your own 8 hexes, 4 cool then 4 warm | every one ≥ 80% lightness (light) or ≤ 35% (dark) |
-| `--layout` | blob placement | `split` (cool left / warm right, white seam), `corners`, `wash`, `halo` |
+| `--layout` | blob placement | `split` (cool left / warm right, white seam), `corners`, `wash`, `halo`, `avatar`, `strip` |
 | `--seed` / `--seeds` | jitter; `0` = random; `1-6` or `2,5,9` renders variants | pick one, then keep it fixed |
 | `--intensity` | colour strength | `0.6` whisper · `1.0` reference · `1.3` punchy |
-| `--size` | px or preset | `og` 1200×630 · `x` 1600×900 · `square` · `story` · `linkedin` · `banner` 1920×768 · `wallpaper` · `4k` · `mobile` |
+| `--size` | px or preset | `og` 1200×630 · `x` 1600×900 · `square` · `story` · `linkedin` · `banner` 1920×768 · `avatar` 1080² · `pfp` 400² · `header` 1500×500 · `wallpaper` · `4k` · `mobile` |
 | `--animate` | blobs drift slowly like light on water | pages and heroes; pointless for stills |
 | `--align left` | left-aligned editorial layout | long headlines, product pages |
 | `--display-font` / `--body-font` | any Google Font name | `Fraunces`, `Newsreader`, `Playfair Display` / `Geist`, `Manrope` |
@@ -101,6 +101,10 @@ top of a spec is a cheap way to explore.
    codebase (recipe.md has the Tailwind version), `.png` for social, `.svg` when there is no browser.
 5. **Match the sizes to the job.** OG image → `--size og`. X post image → `--size x`. X article cover →
    `--size banner`. Story / Reel → `--size story`. All of these in one go is four commands, not one.
+6. **Nothing on it? Change the layout, not just the size.** The default layouts reserve a bright patch
+   for a headline. For art with no text — a profile picture, an app icon, a header strip, a phone
+   wallpaper — use `--blank --layout avatar` (square, circle-safe) or `--blank --layout strip` (3:1 and
+   wider). Both fill the middle with colour instead of leaving the light patch bare.
 
 ## Why the look works (so you can bend it without breaking it)
 
@@ -121,6 +125,8 @@ top of a spec is a cheap way to explore.
 
 - "softer / dreamier" → `--intensity 0.7`, maybe `--grain 0.05`
 - "more colour / punchier" → `--intensity 1.25` or `--layout corners`
+- "profile picture / avatar / app icon" → `--blank --layout avatar --size avatar`
+- "X header / banner strip" → `--blank --layout strip --size header`
 - "match our brand" → `--from-brand "#hex"`; add `--dark` for the dark mode
 - "dark mode" → `--dark` (any palette) or `--palette ink|midnight|graphite|nightfall|lantern`
 - "make it move / flowing / like water" → `--animate`
@@ -143,5 +149,8 @@ Google Fonts by default; `--fonts embed` makes a single self-contained file.
 - *PNG export fails* → run `scripts/selftest.py --png`; the error names what is missing.
 - *Blobs look like circles* → `--intensity` too high for a custom `--colors` set; lift lightness.
 - *Text hard to read* → the leak is off the text; try another `--seed` or `--layout halo`.
+- *Middle looks washed out / empty* → that is the light leak, which exists to seat a headline. With no
+  text over it use `--layout avatar` (or `strip` for wide) — those dial the leak down and pull the
+  colour inward so the centre stays coloured.
 - *Everything works but looks generic* → you used the default copy. The words matter as much as the
   gradient: short serif headline, italic second line, one sentence of sub.
