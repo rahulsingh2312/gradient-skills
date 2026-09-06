@@ -91,9 +91,93 @@ the image does the selling. Lowercase is fine on X; the serif in the image carri
 - *"does it work with Cursor / other agents?"* → "it's a folder with a SKILL.md and a python script. anything that reads markdown and runs python can use it"
 - *"dark mode?"* → "`--palette ink`" + attach the ink tile
 
-## Quote-tweet later (when someone posts a result)
+## Quote posts
+
+### Quoting the 111K gradient post
+
+Quote https://x.com/ryandavogel/status/1956365206147244167 — it is the reference everyone already
+knows, and quoting is friendlier than screenshotting. Credit, never dunk: the joke is the model's
+default taste, not the person who posted it.
+
+**A — the answer** · image: `images/article-two-tweets.png`
+
+> the reason every model writes this exact gradient is that nobody ever told it what the good ones do
+> differently. turns out it's six rules, mostly about lightness. i put them in a claude code skill
+
+**B — the diagnosis** · no image, let the quote carry it
+
+> this is the most recognisable image in software right now and there's no code in it
+>
+> the fix isn't "less gradient", it's lightness above 82% and one white patch where the headline goes.
+> wrote up why: <article link>
+
+**C — the short one** · image: `images/hero-x.png`
+
+> fixed it. one prompt, free skill → gradient.skin
+
+**D — the receipt** · image: `images/covers/crossed-card.png`
+
+> left: what every model reaches for. right: same nine radial gradients with the lightness fixed.
+> one prompt apart. gradient.skin
+
+### Quoting your own launch post when the article goes live
+
+> wrote the long version of this — the six rules, why the white light-leak does most of the work, and
+> what breaks when you push saturation
+>
+> <article link>
+
+### When someone posts a result
 
 > this is what gradient.skin looks like in someone else's hands. 10/10 palette choice <quote>
+
+### Day 3, if it has legs
+
+> <n> installs since tuesday. the most used palette is meadow, which surprised me — i built the whole
+> thing around dawn <quote your launch post>
+
+---
+
+## Posts that carry the article
+
+The article card renders under the post, so the text has to earn the click on its own. First two
+lines are what shows in the timeline.
+
+**A — the number** · cover does the work
+
+> 111,000 people laughed at a screenshot of a gradient last month. they all recognised it instantly
+>
+> i spent a weekend figuring out why the good landing pages look different, then turned it into a
+> slash command. the rules are in here, free to steal
+
+**B — the rules teaser**
+
+> six things separate the AI gradient from the linear/arc one:
+>
+> lightness above 82%. blobs at half the canvas. one white patch behind the headline. a dot grid you
+> can barely see. near-black text, never pure. no borders anywhere
+>
+> the long version:
+
+**C — the flat one**
+
+> not that gradient.
+>
+> (an article about why every model writes the same blue-to-pink, and the six rules the good pages
+> follow instead)
+
+**D — the builder angle**
+
+> i wrote down why a gradient looks expensive, then made it a claude code skill so i never have to
+> think about it again. both are in here — the reasoning first, the one-line install at the end
+
+**Reply under whichever you post** · image: `images/one-prompt.png`
+
+> the whole thing is one line:
+> ```
+> curl -fsSL gradient.skin/install | sh
+> ```
+> then `/gradient-skin make me a hero, palette meadow`
 
 ## Timing
 
