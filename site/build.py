@@ -74,7 +74,7 @@ tiles = "".join(f'<a class="tile sk-{p}" href="#install"><span class="mono">--pa
 
 html = f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>gradient.skin — not that gradient</title>
+<title>gradient.skin not that gradient</title>
 <meta name="description" content="Soft mesh gradient heroes for your landing page. One prompt.">
 <meta property="og:type" content="website"><meta property="og:url" content="{SITE}/"><meta property="og:site_name" content="gradient.skin">
 <meta property="og:title" content="Not that gradient."><meta property="og:description" content="Soft mesh gradient heroes for your landing page. One prompt."><meta property="og:image" content="{SITE}/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Not that gradient. A soft pastel mesh gradient hero.">
