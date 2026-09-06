@@ -149,6 +149,9 @@ Google Fonts by default; `--fonts embed` makes a single self-contained file.
 - *PNG export fails* → run `scripts/selftest.py --png`; the error names what is missing.
 - *Blobs look like circles* → `--intensity` too high for a custom `--colors` set; lift lightness.
 - *Text hard to read* → the leak is off the text; try another `--seed` or `--layout halo`.
+- *"PNG export needs a browser"* → it looks for Playwright, then any Chromium on PATH, then
+  Playwright's browser cache (`~/.cache/ms-playwright`). If yours lives elsewhere, set
+  `PLAYWRIGHT_BROWSERS_PATH`. HTML, CSS and SVG never need a browser.
 - *Middle looks washed out / empty* → that is the light leak, which exists to seat a headline. With no
   text over it use `--layout avatar` (or `strip` for wide) — those dial the leak down and pull the
   colour inward so the centre stays coloured.

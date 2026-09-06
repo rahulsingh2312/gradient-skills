@@ -25,6 +25,10 @@ run("--colors", "#d6d0ff,#cfe1ff,#c8f4ec,#f0cdf5,#f9efc6,#f2db95,#f8d6c0,#f8e2dc
 run("--size", "og", "--layout", "halo", "--grain", "0.06", "--out", f"{tmp}/halo.html")
 run("--blank", "--layout", "avatar", "--size", "avatar", "--out", f"{tmp}/avatar.html")
 run("--blank", "--layout", "strip", "--size", "header", "--out", f"{tmp}/strip.html")
+run("--seed", "0", "--out", f"{tmp}/seed0.html")            # 0 = random, not a silent fallback to 1
+run("--intensity", "0", "--out", f"{tmp}/flat.html")        # 0 = no blobs, not a silent 1.0
+run("--wordmark", "W", "--headline", "H", "--italic", "i", "--sub", "s", "--badge", "b",
+    "--cta", "c", "--footer", "f", "--out", f"{tmp}/full.svg")   # svg carries every element
 run("--list-palettes")
 if "--png" in sys.argv:
     run("--palette", "dawn", "--size", "og", "--scale", "1", "--out", f"{tmp}/a.png")

@@ -85,12 +85,12 @@ GOOGLE_LINK = (
     '&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">'
 )
 FONT_FILES = [  # (family, style, weight, file) — OFL fonts vendored in ../assets/fonts
-    ("Instrument Serif", "normal", 400, "InstrumentSerif-400.woff2"),
-    ("Instrument Serif", "italic", 400, "InstrumentSerif-400i.woff2"),
-    ("Inter", "normal", 400, "Inter-400.woff2"),
-    ("Inter", "normal", 500, "Inter-500.woff2"),
-    ("JetBrains Mono", "normal", 400, "JetBrainsMono-400.woff2"),
-    ("JetBrains Mono", "normal", 500, "JetBrainsMono-500.woff2"),
+    # Inter and JetBrains Mono are variable fonts: one file covers every weight, so the weight
+    # here is a range, not a single value. Shipping a separate 500 file was 80 KB of duplicate bytes.
+    ("Instrument Serif", "normal", "400", "InstrumentSerif-400.woff2"),
+    ("Instrument Serif", "italic", "400", "InstrumentSerif-400i.woff2"),
+    ("Inter", "normal", "100 900", "Inter-400.woff2"),
+    ("JetBrains Mono", "normal", "100 800", "JetBrainsMono-400.woff2"),
 ]
 FONT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "fonts")
 
@@ -175,8 +175,16 @@ def rgba(h, a):
     return f"rgba({r},{g},{b},{a:.2f})"
 
 def parse_size(s):
-    w, h = resolve_size(s).split("x")
-    return int(w), int(h)
+    raw = resolve_size(s)
+    try:
+        w, h = raw.split("x")
+        w, h = int(w), int(h)
+        if w <= 0 or h <= 0:
+            raise ValueError
+    except ValueError:
+        sys.exit(f"--size {s!r} is not a size. Use WxH in pixels (e.g. 1600x900) or a preset: "
+                 + ", ".join(SIZES))
+    return w, h
 
 def parse_colors(s):
     return [c.strip() for c in s.split(",") if c.strip()]
@@ -459,11 +467,13 @@ def build_react(spec, css, blobs_markup):
 # --------------------------------------------------------------------------- svg (no browser needed)
 def build_svg(pal, blobs, leak, spec, w, h):
     defs, shapes = [], []
-    x, y, rx, ry = leak
-    for i, b in enumerate([dict(x=x, y=y, rx=rx, ry=ry, color=pal["leak"], alpha=.95)] + blobs):
+    x, y, rx, ry = leak[:4]
+    leak_a = leak[4] if len(leak) > 4 else .95
+    for i, b in enumerate([dict(x=x, y=y, rx=rx, ry=ry, color=pal["leak"], alpha=leak_a)] + blobs):
         r, g, bb = hex_to_rgb(b["color"])
+        mid = ".55" if b.get("soft") else ".45"      # match the CSS falloff for avatar/strip
         defs.append(f'<radialGradient id="g{i}"><stop offset="0" stop-color="rgb({r},{g},{bb})" stop-opacity="{b["alpha"]:.2f}"/>'
-                    f'<stop offset=".45" stop-color="rgb({r},{g},{bb})" stop-opacity="{b["alpha"]*.5:.2f}"/>'
+                    f'<stop offset="{mid}" stop-color="rgb({r},{g},{bb})" stop-opacity="{b["alpha"]*.55:.2f}"/>'
                     f'<stop offset="1" stop-color="rgb({r},{g},{bb})" stop-opacity="0"/></radialGradient>')
         shapes.append(f'<ellipse cx="{b["x"]/100*w:.0f}" cy="{b["y"]/100*h:.0f}" rx="{b["rx"]/100*w:.0f}" ry="{b["ry"]/100*h:.0f}" fill="url(#g{i})"/>')
     grid = ""
@@ -472,9 +482,16 @@ def build_svg(pal, blobs, leak, spec, w, h):
         grid = (f'<pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".9" fill="{"#fff" if dark else "#000"}" fill-opacity=".11"/></pattern>'
                 f'<rect width="100%" height="100%" fill="url(#dots)"/>')
     text = ""
+    ink = pal["ink"]
+    if not spec.get("blank") and spec.get("wordmark"):
+        text += (f'<text x="50%" y="{h*.075:.0f}" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" '
+                 f'font-size="{h*.032:.0f}" fill="{ink}">{esc(spec["wordmark"])}</text>')
+    if not spec.get("blank") and spec.get("footer"):
+        text += (f'<text x="50%" y="{h*.94:.0f}" text-anchor="middle" font-family="JetBrains Mono, monospace" '
+                 f'font-size="{h*.014:.0f}" letter-spacing="{h*.003:.1f}" fill="{ink}" fill-opacity=".5">'
+                 f'{esc(spec["footer"].upper())}</text>')
     if not spec.get("blank") and spec.get("panels"):
         p = spec["panels"][0]
-        ink = pal["ink"]
         cy = h * .46
         if p.get("eyebrow"):
             text += f'<text x="50%" y="{cy - h*.13:.0f}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="{h*.014:.0f}" letter-spacing="{h*.005:.1f}" fill="{ink}" fill-opacity=".5">{esc(p["eyebrow"].upper())}</text>'
@@ -485,6 +502,21 @@ def build_svg(pal, blobs, leak, spec, w, h):
             text += f'<text x="50%" y="{cy + fs*.95:.0f}" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="{fs:.0f}" letter-spacing="{-fs*.02:.1f}" fill="{ink}">{esc(p["italic"])}</text>'
         if p.get("sub"):
             text += f'<text x="50%" y="{cy + fs*1.55:.0f}" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="{h*.024:.0f}" fill="{ink}" fill-opacity=".62">{esc(p["sub"])}</text>'
+        if p.get("badge"):
+            bh, bfs = h * .046, h * .015
+            bw = bh * .9 + len(p["badge"]) * bfs * .95     # rough advance width for uppercase mono
+            text += (f'<rect x="{(w-bw)/2:.0f}" y="{cy - fs*1.02 - bh*1.6:.0f}" width="{bw:.0f}" height="{bh:.0f}" '
+                     f'rx="{bh*0.28:.0f}" fill="none" stroke="{ink}" stroke-opacity=".22"/>'
+                     f'<text x="50%" y="{cy - fs*1.02 - bh*.92:.0f}" text-anchor="middle" font-family="JetBrains Mono, monospace" '
+                     f'font-size="{bfs:.0f}" letter-spacing="{bfs*.22:.1f}" fill="{ink}" fill-opacity=".72">'
+                     f'{esc(p["badge"].upper())}</text>')
+        if p.get("cta"):
+            ch, cfs = h * .062, h * .019
+            cw = ch * 1.1 + len(p["cta"]) * cfs * .62
+            cty = cy + fs * (2.15 if p.get("sub") else 1.7)
+            text += (f'<rect x="{(w-cw)/2:.0f}" y="{cty:.0f}" width="{cw:.0f}" height="{ch:.0f}" rx="{ch*0.24:.0f}" fill="{ink}"/>'
+                     f'<text x="50%" y="{cty + ch*.66:.0f}" text-anchor="middle" font-family="Inter, system-ui, sans-serif" '
+                     f'font-size="{cfs:.0f}" fill="{pal["base"]}">{esc(p["cta"])}</text>')
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">'
             f'<defs>{"".join(defs)}<filter id="blur"><feGaussianBlur stdDeviation="{min(w,h)*.04:.0f}"/></filter></defs>'
             f'<rect width="100%" height="100%" fill="{pal["base"]}"/>'
@@ -511,6 +543,32 @@ figcaption{{font:500 11px "JetBrains Mono",monospace;letter-spacing:.06em}} .mon
 </style></head><body><h1>gradient.skin · {len(names)} palettes</h1><div class="g">{"".join(cells)}</div></body></html>"""
 
 # --------------------------------------------------------------------------- png
+def find_chromium():
+    """A chromium on PATH, or one of Playwright's downloaded browsers. `npx playwright install`
+    puts them in a cache, not on PATH, so a machine with a perfectly good Chromium looks empty
+    unless you go and look in there."""
+    for name in ("chromium", "chromium-browser", "google-chrome", "google-chrome-stable", "chrome"):
+        found = shutil.which(name)
+        if found:
+            return found
+    roots = [os.environ.get("PLAYWRIGHT_BROWSERS_PATH") or "",
+             os.path.expanduser("~/.cache/ms-playwright"),                      # linux
+             os.path.expanduser("~/Library/Caches/ms-playwright"),              # macos
+             os.path.expandvars(r"%USERPROFILE%\AppData\Local\ms-playwright")]  # windows
+    rel = ["chrome-linux/chrome", "chrome-mac/Chromium.app/Contents/MacOS/Chromium",
+           "chrome-win/chrome.exe", "chrome"]
+    for root in roots:
+        if not root or not os.path.isdir(root):
+            continue
+        for entry in sorted(os.listdir(root), reverse=True):   # newest build first
+            if not entry.startswith(("chromium", "chrome")):
+                continue
+            for r in rel:
+                cand = os.path.join(root, entry, r)
+                if os.path.exists(cand) and os.access(cand, os.X_OK):
+                    return cand
+    return None
+
 def render_png(html_path, out, w, h, scale):
     here = os.path.dirname(os.path.abspath(__file__))
     renderer = os.path.join(here, "render.mjs")
@@ -521,17 +579,30 @@ def render_png(html_path, out, w, h, scale):
         except Exception:
             pass
     cmd = ["node", renderer, html_path, out, f"{w}x{h}", str(scale)]
-    r = subprocess.run(cmd, env=env, capture_output=True, text=True)
-    if r.returncode != 0:
-        sys.stderr.write(r.stderr)
-        # fallback: bare chromium headless screenshot
-        chrome = shutil.which("chromium") or shutil.which("chromium-browser") or shutil.which("google-chrome")
-        if chrome:
-            subprocess.run([chrome, "--headless=new", "--hide-scrollbars", f"--window-size={w},{h}",
-                            f"--screenshot={out}", "--virtual-time-budget=4000", f"file://{html_path}"], check=True)
-        else:
-            sys.exit("PNG export needs Node + Playwright (npm i -g playwright && npx playwright install chromium) "
-                     "or a chromium binary on PATH. The HTML was still written next to the output.")
+    try:
+        r = subprocess.run(cmd, env=env, capture_output=True, text=True)
+        if r.returncode == 0:
+            return
+        err = r.stderr
+    except FileNotFoundError:                       # no node at all, not even a failed run
+        err = "node is not installed\n"
+    # Playwright itself is unavailable; drive a Chromium directly instead
+    chrome = find_chromium()
+    if not chrome:
+        sys.stderr.write(err)
+        sys.exit("PNG export needs a browser. Either `npm i -g playwright && npx playwright install chromium`, "
+                 "or any Chromium on PATH. (Already ran `playwright install`? Point PLAYWRIGHT_BROWSERS_PATH "
+                 "at the cache.) The HTML was written next to the output, so you can screenshot it yourself.")
+    # --no-sandbox: headless Chromium refuses to start as root (containers, CI) without it
+    shot = subprocess.run([chrome, "--headless=new", "--no-sandbox", "--disable-gpu",
+                           "--disable-dev-shm-usage", "--hide-scrollbars", f"--window-size={w},{h}",
+                           f"--force-device-scale-factor={scale}", f"--screenshot={out}",
+                           "--virtual-time-budget=4000", f"file://{html_path}"],
+                          capture_output=True, text=True)
+    if shot.returncode != 0 or not os.path.exists(out):
+        sys.stderr.write(err + shot.stderr)
+        sys.exit(f"{os.path.basename(chrome)} could not render the page. The HTML is at {html_path} "
+                 "if you want to screenshot it yourself.")
 
 # --------------------------------------------------------------------------- main
 def main():
@@ -571,8 +642,6 @@ def main():
     a = ap.parse_args()
     if a.list_palettes:
         print(list_palettes()); return
-    if a.seed == 0:
-        a.seed = random.randint(1, 9999)
     if a.sheet:
         out = a.out if a.out != "skin.html" else "palettes.png"
         fmt = os.path.splitext(out)[1].lstrip(".").lower() or "png"
@@ -613,6 +682,10 @@ def main():
     if a.animate: spec["animate"] = True
     if a.topbar: spec["topbar"] = True
     if a.no_grid: spec["grid"] = False
+    if spec.get("seed") in (None, ""):
+        spec["seed"] = 1
+    if int(spec["seed"]) == 0:                      # 0 = "surprise me", from the flag or a spec file
+        spec["seed"] = random.randint(1, 9999)
     spec.setdefault("grid", True)
     spec["grid_size"] = a.grid_size
     if any(getattr(a, k) for k in ("eyebrow", "headline", "italic", "sub", "badge", "cta")):
@@ -638,10 +711,11 @@ def main():
     if pal.get("dark"): spec["dark"] = True
 
     w, h = parse_size(spec.get("size") or a.size)
-    rng = random.Random(int(spec.get("seed") or 1))
-    blobs, leak = make_blobs(pal, spec.get("layout") or "split", rng, float(spec.get("intensity") or 1.0))
+    rng = random.Random(int(spec["seed"] if spec.get("seed") is not None else 1))
+    intensity = float(spec["intensity"] if spec.get("intensity") is not None else 1.0)
+    blobs, leak = make_blobs(pal, spec.get("layout") or "split", rng, intensity)
     css = build_css(pal, blobs, leak, dict(grid=spec["grid"], grid_size=a.grid_size, grain=float(spec.get("grain") or 0), dark=spec.get("dark"), animate=spec.get("animate")))
-    markup = blobs_html(pal, blobs, leak, int(spec.get("seed") or 1)) if spec.get("animate") else ""
+    markup = blobs_html(pal, blobs, leak, int(spec["seed"] if spec.get("seed") is not None else 1)) if spec.get("animate") else ""
 
     fmt = a.format or os.path.splitext(a.out)[1].lstrip(".").lower() or "html"
     if not spec.get("fonts"):
@@ -660,9 +734,20 @@ def main():
     elif fmt == "html":
         with open(a.out, "w") as f: f.write(build_html(spec, css, w, h, standalone_size=not a.responsive, blobs_markup=markup))
     elif fmt == "png":
+        # The renderer screenshots an HTML file, so one has to be staged. Writing it to
+        # <out>.html would silently overwrite a hero the user just generated there, so pick a
+        # free name: <out>.html only if nothing is in the way, otherwise a temp file.
         html_path = os.path.splitext(a.out)[0] + ".html"
+        staged_tmp = os.path.exists(html_path)
+        if staged_tmp:
+            fd, html_path = tempfile.mkstemp(suffix=".html", prefix="skin-")
+            os.close(fd)
         with open(html_path, "w") as f: f.write(build_html(spec, css, w, h, blobs_markup=markup))
-        render_png(os.path.abspath(html_path), os.path.abspath(a.out), w, h, a.scale)
+        try:
+            render_png(os.path.abspath(html_path), os.path.abspath(a.out), w, h, a.scale)
+        finally:
+            if staged_tmp and os.path.exists(html_path):
+                os.remove(html_path)
     print(f"wrote {a.out}  ({fmt}, {w}x{h}, palette={spec.get('palette')}, layout={spec.get('layout')}, seed={spec.get('seed')})")
 
 if __name__ == "__main__":

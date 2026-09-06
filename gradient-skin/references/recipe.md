@@ -160,7 +160,15 @@ In the script: `--blank --layout avatar --size avatar` and `--blank --layout str
 Keep the dot grid on: at 7% it is the one detail that stops a soft gradient looking like everyone
 else's soft gradient.
 
-## 9. Things that break it
+## 9. SVG vs HTML
+
+The SVG export is standalone (no browser, no webfonts embedded) and now carries the same elements as
+the HTML: wordmark, badge, headline, italic line, sub, CTA and footer. Two things still differ by
+nature — SVG has no dot-grid mask fade (the grid is uniform) and no drift animation, and it names
+fonts rather than shipping them, so a viewer without Instrument Serif installed falls back to Georgia.
+For anything typographic that has to look identical everywhere, export PNG.
+
+## 10. Things that break it
 
 - Blobs under 35% of the box → visible circles.
 - Hard stops (anything ending above ~75%) → visible edges.
